@@ -1,5 +1,5 @@
 import pandas as pd
-from ModbusReceiver import ModbusReceiver
+from ModbusHandler import ModbusReceiver
 
 class LabJack:
 
