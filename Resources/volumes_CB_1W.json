@@ -1,0 +1,425 @@
+
+[
+  // Manual Valves
+  {
+    "item":  "CB_1W.MV_1",
+    "states": {
+      "open": ["GSH_1.VOL_24", "CB_1W.VOL_1"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {}
+  },
+  //Electronic Valves
+  {
+    "item": "CB_1W.EV_11",
+    "states": {
+      "open": ["CB_1W.CO_11", "CB_1W.VOL_2"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO11_CO12_CO13.csv",
+      "binary_string_pos": 0
+    }
+  },
+  {
+    "item": "CB_1W.EV_12",
+    "states": {
+      "open": ["CB_1W.CO_12", "CB_1W.VOL_2"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO11_CO12_CO13.csv",
+      "binary_string_pos": 1
+    }
+  },
+  {
+    "item": "CB_1W.EV_13",
+    "states": {
+      "open": ["CB_1W.CO_13", "CB_1W.VOL_2"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO11_CO12_CO13.csv",
+      "binary_string_pos": 2
+    }
+  },
+  {
+    "item": "CB_1W.EV_14",
+    "states": {
+      "a": ["CB_1W.VOL_2","CB_1W.VOL_3"],
+      "b": ["CB_1W.VOL_2","CB_1W.VOL_4"]
+    },
+    "current_state": "a",
+    "data": {}
+  },
+  {
+    "item": "CB_1W.EV_21",
+    "states": {
+      "open": ["CB_1W.CO_21", "CB_1W.VOL_5"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO21_CO22_CO23.csv",
+      "binary_string_pos": 0
+    }
+  },
+  {
+    "item": "CB_1W.EV_22",
+    "states": {
+      "open": ["CB_1W.CO_22", "CB_1W.VOL_5"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO21_CO22_CO23.csv",
+      "binary_string_pos": 1
+    }
+  },
+  {
+    "item": "CB_1W.EV_23",
+    "states": {
+      "open": ["CB_1W.CO_33", "CB_1W.VOL_5"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO21_CO22_CO23.csv",
+      "binary_string_pos": 2
+    }
+  },
+  {
+    "item": "CB_1W.EV_24",
+    "states": {
+      "a": ["CB_1W.VOL_5","CB_1W.VOL_6"],
+      "b": ["CB_1W.VOL_5","CB_1W.VOL_7"]
+    },
+    "current_state": "a",
+    "data": {}
+  },
+  {
+    "item": "CB_1W.EV_31",
+    "states": {
+      "open": ["CB_1W.CO_31", "CB_1W.VOL_8"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO31_CO32_CO33.csv",
+      "binary_string_pos": 0
+    }
+  },
+  {
+    "item": "CB_1W.EV_32",
+    "states": {
+      "open": ["CB_1W.CO_32", "CB_1W.VOL_8"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO31_CO32_CO33.csv",
+      "binary_string_pos": 1
+    }
+  },
+  {
+    "item": "CB_1W.EV_33",
+    "states": {
+      "open": ["CB_1W.CO_33", "CB_1W.VOL_8"],
+      "closed": []
+    },
+    "current_state": "open",
+    "data": {
+      "data_table": "CB_1W/emissions_CB1W_CO31_CO32_CO33.csv",
+      "binary_string_pos": 2
+    }
+  },
+  {
+    "item": "CB_1W.EV_34",
+    "states": {
+      "a": ["CB_1W.VOL_8","CB_1W.VOL_9"],
+      "b": ["CB_1W.VOL_8","CB_1W.VOL_10"]
+    },
+    "current_state": "a",
+    "data": {}
+  },
+  // Choked orifices
+  {
+    "item": "CB_1W.CO_11",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_11"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.007",
+      "data_table": "CB_1W/emissions_CB1W_CO11_CO12_CO13.csv",
+      "binary_string_pos": 0
+    }
+  },
+  {
+    "item": "CB_1W.CO_12",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_12"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.010",
+      "data_table": "CB_1W/emissions_CB1W_CO11_CO12_CO13.csv",
+      "binary_string_pos": 1
+    }
+  },
+  {
+    "item": "CB_1W.CO_13",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_13"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.010",
+      "data_table": "CB_1W/emissions_CB1W_CO11_CO12_CO13.csv",
+      "binary_string_pos": 2
+    }
+  },
+  {
+    "item": "CB_1W.CO_21",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_21"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.010",
+      "data_table": "CB_1W/emissions_CB1W_CO21_CO22_CO23.csv",
+      "binary_string_pos": 0
+    }
+  },
+  {
+    "item": "CB_1W.CO_22",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_22"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.015",
+      "data_table": "CB_1W/emissions_CB1W_CO21_CO22_CO23.csv",
+      "binary_string_pos": 1
+    }
+  },
+  {
+    "item": "CB_1W.CO_23",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_23"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.021",
+      "data_table": "CB_1W/emissions_CB1W_CO21_CO22_CO23.csv",
+      "binary_string_pos": 2
+    }
+  },
+  {
+    "item": "CB_1W.CO_31",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_31"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.012",
+      "data_table": "CB_1W/emissions_CB1W_CO31_CO32_CO33.csv",
+      "binary_string_pos": 0
+    }
+  },
+  {
+    "item": "CB_1W.CO_32",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_22"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.019",
+      "data_table": "CB_1W/emissions_CB1W_CO31_CO32_CO33.csv",
+      "binary_string_pos": 1
+    }
+  },
+  {
+    "item": "CB_1W.CO_33",
+    "states": {
+      "normal": ["CB_1W.VOL_1", "CB_1W.EV_23"]
+    },
+    "current_state": "normal",
+    "data": {
+      "diameter": "0.025",
+      "data_table": "CB_1W/emissions_CB1W_CO31_CO32_CO33.csv",
+      "binary_string_pos": 2
+    }
+  },
+  // Volumes
+  {
+    "item": "CB_1W.VOL_1",
+    "states": {
+      "normal":  ["CB_1W.MV_1", "CB_1W.TC_1", "CB_1W.PT_1",
+                  "CB_1W.CO_11", "CB_1W.CO_12", "CB_1W.CO_13",
+                  "CB_1W.CO_21", "CB_1W.CO_22", "CB_1W.CO_23",
+                  "CB_1W.CO_31", "CB_1W.CO_32", "CB_1W.CO_33"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_2",
+    "states": {
+      "normal": ["CB_1W.EV_11", "CB_1W.EV_12", "CB_1W.EV_13", "CB_1W.EV_14"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_3",
+    "states": {
+      "normal": ["CB_1W.EV_14"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_4",
+    "states": {
+      "normal": ["CB_1W.EV_14"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_5",
+    "states": {
+      "normal": ["CB_1W.EV_21", "CB_1W.EV_22", "CB_1W.EV_23", "CB_1W.EV_24"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_6",
+    "states": {
+      "normal": ["CB_1W.EV_24"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_7",
+    "states": {
+      "normal": ["CB_1W.EV_24"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_8",
+    "states": {
+      "normal": ["CB_1W.EV_31", "CB_1W.EV_32", "CB_1W.EV_33", "CB_1W.EV_34"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_9",
+    "states": {
+      "normal": ["CB_1W.EV_34"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  {
+    "item": "CB_1W.VOL_10",
+    "states": {
+      "normal": ["CB_1W.EV_34"]
+    },
+    "current_state": "normal",
+    "data": {
+      "emissions": 0,
+      "volumetric_flow": 0,
+      "mass_flow": 0,
+      "gas_pressure": 0,
+      "gas_density": 0
+    }
+  },
+  // Gauges
+  {
+    "item": "CB_1W.TC_1",
+    "states": {
+      "normal": ["CB_1W.VOL_1"]
+    },
+    "current_state": "normal",
+    "data": {
+      "reading": 0,
+      "type": "T"
+    }
+  },
+  {
+    "item": "CB_1W.PT_1",
+    "states": {
+      "normal": ["CB_1W.VOL_1"]
+    },
+    "current_state": "normal",
+    "data": {
+      "reading": 0,
+      "psi": 250
+    }
+  }
+]
