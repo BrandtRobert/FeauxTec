@@ -2,16 +2,24 @@ import socket
 from typing import Callable
 from ModbusHandler import ModbusDecoder
 import threading
+from typing import Dict
 
 
 class ModbusReceiver:
 
-    def __init__(self, port):
+    def __init__(self, port, localhost=True):
         self.port = port
+        self.localhost = localhost
         self.stop = threading.Event()
 
+    '''
+        Dispatches packet data for decoding based on it's function code.
+        ModbusDecoder handles decoding of the packets and returns a Dict containing
+        appropriate data. Invalid function codes lead to an invalid_function_code message which
+        is also created by the modbus decoder.
+    '''
     @staticmethod
-    def _dissect_packet(packet_data):
+    def _dissect_packet(packet_data) -> Dict:
         function_code = packet_data[0]
         switch = {
             1: ModbusDecoder.read_coils,
@@ -26,11 +34,19 @@ class ModbusReceiver:
         function = switch.get(function_code, ModbusDecoder.invalid_function_code)
         return function(packet_data)
 
+    '''
+        Starts the Modbus server and listens for packets over a TCP/IP connection. By default it will bind to
+        localhost at a port specified in the constructor. Upon receiving a modbus message it will decode the header
+        and send the function code and data to the _dissect_packet function for further processing. Error packets
+        lead to an immediate response with an error code, while valid requests are sent back to the request handler.
+    '''
     def start_server(self, request_handler: Callable) -> None:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            # s.bind((socket.gethostname(), self.port))
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            s.bind(('localhost', self.port))
+            if self.localhost:
+                s.bind(('localhost', self.port))
+            else:
+                s.bind((socket.gethostname(), self.port))
             s.listen(5)
             print('Starting server at {}:{}'.format(socket.gethostname(), self.port))
             while not self.stop.is_set():
@@ -58,6 +74,12 @@ class ModbusReceiver:
                         # connection.sendall(response)
                         connection.close()
 
+    '''
+        Breaks the server out of it's blocking accept call and sets the stop flag.
+        In order to do this the method uses a 'dummy' connection to break the blocking call.
+        It then sends a 'dummy' message that will lead to the method dropping the request and exiting.
+        **NOTE**: This is especially useful when the server is being run on it's own thread.
+    '''
     def stop_server(self) -> None:
         self.stop.set()
         # In order to stop the server we have to interrupt

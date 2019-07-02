@@ -1,12 +1,18 @@
 import pandas as pd
 
+"""
+    In memory reference to a prerecord emissions table. The emissions table is specified in:
+    './Resources/CB_1W/emissions_<electronic_valve_name>..._<electronic_valve_name>.csv'
+"""
+
 
 class EmissionsTable:
 
     def __init__(self, file_path):
         self.table = self._parse_emissions_table(file_path)
 
-    def _parse_emissions_table(self, path):
+    @staticmethod
+    def _parse_emissions_table(path):
         df = pd.read_csv(path, sep='\s+').set_index('p')
         return df
 

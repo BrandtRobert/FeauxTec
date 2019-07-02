@@ -1,3 +1,9 @@
+"""
+    This is a class built to contain data from entries in the JSON volumes file.
+    Each component represents one object or gas volume node in the gas house system.
+"""
+
+
 class Component:
 
     def __init__(self, name: str, states: dict, current_state: str, data: dict, parent: str):

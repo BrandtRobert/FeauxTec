@@ -1,5 +1,13 @@
 from typing import Dict
 
+"""
+    This module contains all the decoding methods for breakdown binary modbus data.
+    Most of the function code protocols follow a similar strategy where a starting register is specified
+    followed by the amount of registers to read.
+    
+    Write methods will send a starting register followed by a set of values to write into concurrent registers.
+"""
+
 
 def read_entity(data) -> (bool, Dict):
     data = data[1:]

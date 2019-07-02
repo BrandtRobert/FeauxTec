@@ -8,6 +8,26 @@ class PnIDParser:
     def __init__(self, path):
         self.file_path = path
 
+    '''
+        Parses pnid json and returns a list of component objects. JSON entries go by the following format:
+            {
+                "item": "<obj-name>",
+                "states": {
+                    // set of valid states
+                    "open": [<neighboring/connected objects when in this state>],
+                    "close": [<neighboring/connected objects when in this state>]
+                    // if the object only has one state then use the convention
+                    "normal": [<neighboring objects>]
+                },
+                "current_state": <must be a state in "states">,
+                "data": {
+                    // any other relevant data pertaining to the object
+                    reading: 12.5,
+                    temperature: 45,
+                    etc.
+                }
+            }
+    '''
     def read_json(self):
         try:
             with open(self.file_path, 'r') as file_handle:
