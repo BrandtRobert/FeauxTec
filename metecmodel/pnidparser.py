@@ -1,6 +1,7 @@
 from json_minify import json_minify
-from METECModel.component import Component
+from metecmodel.component import Component
 import json
+from typing import List
 
 
 class PnIDParser:
@@ -28,7 +29,7 @@ class PnIDParser:
                 }
             }
     '''
-    def read_json(self):
+    def read_json(self) -> List[Component]:
         try:
             with open(self.file_path, 'r') as file_handle:
                 cleaned_json: str = json_minify(file_handle.read())

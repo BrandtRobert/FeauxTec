@@ -41,3 +41,22 @@ class Component:
             print(self.current_state)
             print(self.states)
             return []
+
+    def get_type(self):
+        if 'TC' in self.name:
+            return 'thermocouple'
+        elif 'PT' in self.name:
+            return 'pressure-transducer'
+        elif 'MV' in self.name:
+            return 'manual-valve'
+        elif 'EV' in self.name:
+            if 'open' not in self.states or 'closed' not in self.states:
+                return 'electronic-valve-3-way'
+            else:
+                return 'electronic-valve'
+        elif 'VOL' in self.name:
+            return 'gas-volume'
+        elif 'CO' in self.name:
+            return 'choked-orifice'
+        else:
+            return 'unknown'

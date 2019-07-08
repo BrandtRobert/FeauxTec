@@ -408,7 +408,11 @@
     "current_state": "normal",
     "data": {
       "reading": 0,
-      "type": "T"
+      "type": "T",
+      "slope": 50,
+      "offset": -10.3,
+      "min": 14.7,
+      "max": 214.7
     }
   },
   {
@@ -419,7 +423,9 @@
     "current_state": "normal",
     "data": {
       "reading": 0,
-      "psi": 250
+      "psi": 250,
+      "min": -454,
+      "max": 752
     }
   }
 ]

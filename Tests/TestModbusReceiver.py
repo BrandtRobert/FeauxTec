@@ -1,6 +1,6 @@
 import socket
 import unittest
-from ModbusHandler import ModbusReceiver
+from modbushandler import ModbusReceiver
 from pymodbus.client.sync import ModbusTcpClient
 import threading
 
