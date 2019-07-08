@@ -1,2 +1,3 @@
-from .ModbusReceiver import ModbusReceiver
-from .ModbusReceiver import ModbusDecoder
+from .modbusreceiver import ModbusReceiver
+from .modbusdecoder import *
+from .modbusencoder import *

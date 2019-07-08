@@ -69,48 +69,10 @@ def write_entity(data) -> (bool, Dict):
 
 def write_single_coil(data):
     return write_entity(data)
-    # data = data[1:]
-    # is_error = False
-    #
-    # coil_address = (data[0] << 8) | (data[1])
-    # value_to_write = (data[2] << 8) | (data[3])
-    #
-    # if coil_address < 0:
-    #     is_error = True
-    #     return is_error, _invalid_register_addr(data)
-    #
-    # if value_to_write == 0:
-    #     switch = 'off'
-    # elif value_to_write == 0xFF00:
-    #     switch = 'on'
-    # else:
-    #     is_error = True
-    #     return is_error, _invalid_data_value(data)
-    #
-    # return is_error, {
-    #     'coil_address': coil_address,
-    #     'switch': switch
-    # }
 
 
 def write_single_holding_register(data):
     return write_entity(data)
-    # is_error = False
-    # data = data[1:]
-    # register_address = (data[0] << 8) | (data[1])
-    # value_to_write = (data[2] << 8) | (data[3])
-    #
-    # if register_address < 0:
-    #     is_error = True
-    #     return is_error, _invalid_register_addr(data)
-    # elif value_to_write < 0:
-    #     is_error = True
-    #     return is_error, _invalid_data_value(data)
-    #
-    # return is_error, {
-    #     'register_address': register_address,
-    #     'value_to_write': value_to_write
-    # }
 
 
 def write_multiple_coils(data):
@@ -122,7 +84,7 @@ def write_multiple_coils(data):
     num_bytes_of_coils = data[4]
     coil_bytes = data[5:5 + num_bytes_of_coils]
     coil_values = [0] * (num_bytes_of_coils * 8)
-
+    # Unpack the coil value hex into an array of on/off (1/0)
     for b in range(0, num_bytes_of_coils * 8):
         mask = 0x01 << b % 8
         bit_set = coil_bytes[b//8] & mask
@@ -170,6 +132,21 @@ def write_multiple_holding_registers(data):
         'address': first_register,
         'values': register_values,
         'count': num_regs_to_write
+    }
+
+
+def dissect_header(header_data):
+    if len(header_data) < 7:
+        return {'error': 'header is too short'}
+    transaction_id = (header_data[0] << 8) | (header_data[1])
+    protocol_id = (header_data[2] << 8) | (header_data[3])
+    length = (header_data[4] << 8) | (header_data[5])
+    unit_id = (header_data[6])
+    return {
+        'transaction_id': transaction_id,
+        'protocol_id': protocol_id,
+        'length': length,
+        'unit_id': unit_id
     }
 
 

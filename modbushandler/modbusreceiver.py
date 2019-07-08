@@ -1,16 +1,17 @@
 import socket
 from typing import Callable
-from ModbusHandler import ModbusDecoder
+from modbushandler import modbusdecoder
 import threading
 from typing import Dict
 
 
 class ModbusReceiver:
 
-    def __init__(self, port, localhost=True):
+    def __init__(self, port, localhost=True, device_function_codes = None):
         self.port = port
         self.localhost = localhost
         self.stop = threading.Event()
+        self.device_function_codes = device_function_codes
 
     '''
         Dispatches packet data for decoding based on it's function code.
@@ -18,20 +19,23 @@ class ModbusReceiver:
         appropriate data. Invalid function codes lead to an invalid_function_code message which
         is also created by the modbus decoder.
     '''
-    @staticmethod
-    def _dissect_packet(packet_data) -> Dict:
+    def _dissect_packet(self, packet_data) -> Dict:
         function_code = packet_data[0]
+        # Check that the device supports this function code
+        if self.device_function_codes:
+            if function_code not in self.device_function_codes:
+                return modbusdecoder.invalid_function_code(packet_data)
         switch = {
-            1: ModbusDecoder.read_coils,
-            2: ModbusDecoder.read_discrete_inputs,
-            3: ModbusDecoder.read_holding_registers,
-            4: ModbusDecoder.read_input_registers,
-            5: ModbusDecoder.write_single_coil,
-            6: ModbusDecoder.write_single_holding_register,
-            15: ModbusDecoder.write_multiple_coils,
-            16: ModbusDecoder.write_multiple_holding_registers
+            1: modbusdecoder.read_coils,
+            2: modbusdecoder.read_discrete_inputs,
+            3: modbusdecoder.read_holding_registers,
+            4: modbusdecoder.read_input_registers,
+            5: modbusdecoder.write_single_coil,
+            6: modbusdecoder.write_single_holding_register,
+            15: modbusdecoder.write_multiple_coils,
+            16: modbusdecoder.write_multiple_holding_registers
         }
-        function = switch.get(function_code, ModbusDecoder.invalid_function_code)
+        function = switch.get(function_code, modbusdecoder.invalid_function_code)
         return function(packet_data)
 
     '''
@@ -57,7 +61,8 @@ class ModbusReceiver:
                         continue
                     # Modbus length is in bytes 4 & 5 of the header according to spec (pg 25)
                     # https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
-                    length = (header[4] << 8) | (header[5])
+                    header = modbusdecoder.dissect_header(header)
+                    length = header['length']
                     if length == 0:
                         continue
                     data = connection.recv(length)
@@ -68,11 +73,13 @@ class ModbusReceiver:
                         continue
                     else:
                         dissection['type'] = 'request'
-                        dissection['function_code'] = data[0]
-                        request_handler(dissection)
-                        # response = request_handler(dissection)
-                        # connection.sendall(response)
-                        connection.close()
+                        header['function_code'] = data[0]
+                        response = request_handler({
+                            'header': header,
+                            'body': dissection
+                        })
+                        connection.sendall(response)
+                        # connection.close()
 
     '''
         Breaks the server out of it's blocking accept call and sets the stop flag.
