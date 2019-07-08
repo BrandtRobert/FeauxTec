@@ -409,10 +409,8 @@
     "data": {
       "reading": 0,
       "type": "T",
-      "slope": 50,
-      "offset": -10.3,
-      "min": 14.7,
-      "max": 214.7
+      "min": -454,
+      "max": 752
     }
   },
   {
@@ -424,8 +422,10 @@
     "data": {
       "reading": 0,
       "psi": 250,
-      "min": -454,
-      "max": 752
+      "slope": 50,
+      "offset": -10.3,
+      "min": 14.7,
+      "max": 214.7
     }
   }
 ]

@@ -56,12 +56,15 @@ class LabJack:
     '''
     def _get_next_pin(self, pin):
         return self.pins.loc[self.pins['pin'] == pin]['next_pin']
+
     '''
         Look up the component in the model using the pin and referencing the sensor properties file.
     '''
     def _get_component_from_pin(self, pin):
         sensor = self._pin_to_sensor(pin)
         # We use '_' instead of '-' in the physical model as '-' gets confused in mathematical interpretations
+        if len(sensor) == 0:
+            return None
         lookup_name = sensor['name'][0].replace('-', '_')
         return self.model.get_node_component(lookup_name)
 
@@ -70,10 +73,8 @@ class LabJack:
         if 'reading' in component.data.keys():
             reading = component.data['reading']
             if 'offset' in component.data.keys():
-                print('offset', component.data['offset'])
                 reading = reading - component.data['offset']
             if 'slope' in component.data.keys():
-                print('slope', component.data['slope'])
                 reading = reading / component.data['slope']
         elif 'electronic-valve' in component.get_type():
             reading = 1 if component.current_state is 'open' else 0
@@ -95,9 +96,24 @@ class LabJack:
         return component
 
     '''
-        ?? how to handle multiple register read ??
-        
-        
+        We are mapping physical commands to our virtual model. Our model is in different about whether
+        a component holds a 32 bit or 16 bit reading. However, we are simulating a labjack with 16bit memory 
+        words so we have to account for the fact that floats and 32 bit ints take up two registers.
+    '''
+    def _convert_register_count_to_pin_count(self, start_register, count):
+        pin_count = 0
+        current_pin_record = self.pins.loc[start_register]
+        while count > 0:
+            data_type = current_pin_record['data_type']
+            if '32' in data_type:
+                count = count - 2
+            else:
+                count = count - 1
+            current_pin_record = self._get_next_pin(current_pin_record['next_pin'])
+            pin_count = pin_count + 1
+        return pin_count
+
+    '''
         Handles decoded Modbus requests and takes action based on requested methods.
         TCP/IP communicates are handled in modbushandler.ModbusReceiver, this function is a callback
         that is passed to the ModbusReceiver so that it can take action on decoded Modbus messages.
@@ -117,8 +133,10 @@ class LabJack:
 
         # read one register
         if request_header['function_code'] == 4:
+            # rn if the reading is a 32 bit value then this is gonna break i believe
             reading = self._read_from_component(component)
-            return encoder.respond_read_registers(request_header, [reading], self.ENDIANNESS)
+            data_type = self.pins.loc[self.pins['pin'] == pin]['data_type'][0]
+            return encoder.respond_read_registers(request_header, [(reading, data_type)], self.ENDIANNESS)
         # write one register
         elif request_header['function_code'] == 6:
             value_to_set = request_body['value']
@@ -130,7 +148,8 @@ class LabJack:
             current_component = component
             current_pin = pin
             values = request_body['values']
-            for i in range(request_body['count']):
+            pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
+            for i in range(pin_count):
                 value_to_set = values[i]
                 self._write_to_component(current_component, value_to_set)
                 current_pin = self._get_next_pin(current_pin)
@@ -141,9 +160,11 @@ class LabJack:
             current_component = component
             current_pin = pin
             values = []
-            for i in range(request_body['count']):
-                values.append(self._read_from_component(current_component))
-                current_pin = self._get_next_pin(current_pin)
+            pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
+            for i in range(pin_count):
+                current_dtype = self.pins.loc[self.pins['pin'] == current_pin]['data_type'][0]
+                values.append((self._read_from_component(current_component), current_dtype))
+                current_pin = self._get_next_pin(current_pin)[0]
                 current_component = self._get_component_from_pin(current_pin)
             return encoder.respond_read_registers(request_header, values, self.ENDIANNESS)
         else:
@@ -162,4 +183,4 @@ class LabJack:
 if __name__ == "__main__":
     m = PnIDModel('../Resources/volumes_CB_1W.json', 50, {'ambient_temperature': 75})
     s = LabJack('CB-1W.LJ-1', '../Resources/pins_to_registers.csv', '../Resources/sensor_properties.csv', m)
-    s.start_server(8080)
+    s.start_server(502)

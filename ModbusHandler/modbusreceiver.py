@@ -79,6 +79,7 @@ class ModbusReceiver:
                             'body': dissection
                         })
                         connection.sendall(response)
+                        print(response)
                         # connection.close()
 
     '''
