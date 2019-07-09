@@ -1,4 +1,4 @@
-from metecmodel.pnidparser import PnIDParser
+from metecmodel.graphparser import PnIDParser
 from metecmodel.emissionstable import EmissionsTable
 from metecmodel.component import Component
 from typing import List, Tuple
@@ -10,7 +10,7 @@ import networkx as nx
 """
 
 
-class PnIDModel:
+class PnIdGraph:
 
     '''
         Parameters:
@@ -43,7 +43,7 @@ class PnIDModel:
                 component.data['reading'] = self.site_properties.get('ambient_temperature', 0)
         nx_graph = nx.Graph()
         list(map(lambda comp: nx_graph.add_node(comp.get_full_name(), component=comp), components))
-        PnIDModel._add_edges(nx_graph, components)
+        PnIdGraph._add_edges(nx_graph, components)
         return nx_graph, components
 
     '''
@@ -156,7 +156,7 @@ class PnIDModel:
     Test main method
 '''
 if __name__ == "__main__":
-    model = PnIDModel('../Resources/volumes_CB_1W.json', 50)
+    model = PnIdGraph('../Resources/volumes_CB_1W.json', 50)
     print(model.get_node_component('CB_1W.PT_1'))
     model.change_node_state('CB_1W.EV_12', 'closed')
     model.change_node_state('CB_1W.EV_23', 'closed')

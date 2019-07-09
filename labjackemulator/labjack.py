@@ -2,7 +2,7 @@ import pandas as pd
 from modbushandler import ModbusReceiver
 import modbushandler.modbusencoder as encoder
 import modbushandler.modbusdecoder as decoder
-from metecmodel import PnIDModel
+from metecmodel import PnIdGraph
 from metecmodel import Component
 from typing import Dict
 
@@ -55,7 +55,7 @@ class LabJack:
         weird with the different 8, 16, and 32 bit data types. This method helps clear that up.
     '''
     def _get_next_pin(self, pin):
-        return self.pins.loc[self.pins['pin'] == pin]['next_pin']
+        return self.pins.loc[self.pins['pin'] == pin]['next_pin'].values[0]
 
     '''
         Look up the component in the model using the pin and referencing the sensor properties file.
@@ -103,13 +103,15 @@ class LabJack:
     def _convert_register_count_to_pin_count(self, start_register, count):
         pin_count = 0
         current_pin_record = self.pins.loc[start_register]
+        current_pin_record = self.pins.loc[self.pins['pin'] == current_pin_record['pin']]
         while count > 0:
-            data_type = current_pin_record['data_type']
+            data_type = current_pin_record['data_type'].values[0]
             if '32' in data_type:
                 count = count - 2
             else:
                 count = count - 1
-            current_pin_record = self._get_next_pin(current_pin_record['next_pin'])
+            current_pin = self._get_next_pin(current_pin_record['pin'].values[0])
+            current_pin_record = self.pins.loc[self.pins['pin'] == current_pin]
             pin_count = pin_count + 1
         return pin_count
 
@@ -151,7 +153,8 @@ class LabJack:
             pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
             for i in range(pin_count):
                 value_to_set = values[i]
-                self._write_to_component(current_component, value_to_set)
+                if current_component is not None:
+                    self._write_to_component(current_component, value_to_set)
                 current_pin = self._get_next_pin(current_pin)
                 current_component = self._get_component_from_pin(current_pin)
             return encoder.respond_write_registers(request_header, request_body['address'], request_body['count'])
@@ -162,9 +165,13 @@ class LabJack:
             values = []
             pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
             for i in range(pin_count):
-                current_dtype = self.pins.loc[self.pins['pin'] == current_pin]['data_type'][0]
-                values.append((self._read_from_component(current_component), current_dtype))
-                current_pin = self._get_next_pin(current_pin)[0]
+                current_dtype = self.pins.loc[self.pins['pin'] == current_pin]['data_type'].values[0]
+                # Empty registers will be filled with 0's
+                if current_component is not None:
+                    values.append((self._read_from_component(current_component), current_dtype))
+                else:
+                    values.append((0x00, current_dtype))
+                current_pin = self._get_next_pin(current_pin)
                 current_component = self._get_component_from_pin(current_pin)
             return encoder.respond_read_registers(request_header, values, self.ENDIANNESS)
         else:
@@ -181,6 +188,6 @@ class LabJack:
 
 
 if __name__ == "__main__":
-    m = PnIDModel('../Resources/volumes_CB_1W.json', 50, {'ambient_temperature': 75})
+    m = PnIdGraph('../Resources/volumes_CB_1W.json', 17.275, {'ambient_temperature': 75})
     s = LabJack('CB-1W.LJ-1', '../Resources/pins_to_registers.csv', '../Resources/sensor_properties.csv', m)
     s.start_server(502)

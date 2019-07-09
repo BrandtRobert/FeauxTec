@@ -1,0 +1,1 @@
+from .componentinterface import ComponentBaseClass

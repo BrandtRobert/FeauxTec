@@ -1,2 +1,2 @@
-from .pnidmodel import PnIDModel
+from .pnidgraph import PnIdGraph
 from .component import Component

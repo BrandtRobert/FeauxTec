@@ -25,9 +25,6 @@ def respond_read_registers(header, registers, endianness='BIG'):
     endian_char = '>' if endianness == 'BIG' else '<'
     # get header contents or default
     header = _get_header_contents_or_default(header)
-    header['length'] = 3 + 2 * len(registers)
-
-    header = _pack_header(header, endian_char)
 
     register_count = 0
     for _, dtype in registers:
@@ -37,6 +34,10 @@ def respond_read_registers(header, registers, endianness='BIG'):
             register_count = register_count + 16 // 8
         else:
             register_count = register_count + 8
+
+    header['length'] = 3 + register_count
+
+    header = _pack_header(header, endian_char)
 
     register_count = struct.pack(endian_char + 'b', register_count)
 
