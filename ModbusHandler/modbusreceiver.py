@@ -3,15 +3,17 @@ from typing import Callable
 from modbushandler import modbusdecoder
 import threading
 from typing import Dict
+from logger import set_up_logger
 
 
 class ModbusReceiver:
 
-    def __init__(self, port, localhost=True, device_function_codes = None):
+    def __init__(self, port, localhost=True, device_function_codes=None):
         self.port = port
         self.localhost = localhost
         self.stop = threading.Event()
         self.device_function_codes = device_function_codes
+        self.logger = set_up_logger('ServerLogger', '../logger/logs/server_log.txt')
 
     '''
         Dispatches packet data for decoding based on it's function code.
@@ -53,34 +55,44 @@ class ModbusReceiver:
                 s.bind((socket.gethostname(), self.port))
             s.listen(5)
             print('Starting server at {}:{}'.format(socket.gethostname(), self.port))
+            self.logger.info('Server started {}:{}'.format(socket.gethostname(), self.port))
             while not self.stop.is_set():
                 connection, address = s.accept()
+                self.logger.info('New connection accepted {}'.format(connection.getpeername()))
                 with connection:
-                    header = connection.recv(7)
-                    if header == b'' or len(header) <= 0:
-                        continue
-                    # Modbus length is in bytes 4 & 5 of the header according to spec (pg 25)
-                    # https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
-                    header = modbusdecoder.dissect_header(header)
-                    length = header['length']
-                    if length == 0:
-                        continue
-                    data = connection.recv(length)
-                    is_error, dissection = self._dissect_packet(data)
-                    if is_error:
-                        connection.sendall(dissection)
-                        connection.close()
-                        continue
-                    else:
-                        dissection['type'] = 'request'
-                        header['function_code'] = data[0]
-                        response = request_handler({
-                            'header': header,
-                            'body': dissection
-                        })
-                        connection.sendall(response)
-                        print(response)
-                        # connection.close()
+                    while True:
+                        try:
+                            header = connection.recv(7)
+                            if header == b'' or len(header) <= 0:
+                                self.logger.debug('Initial read was empty, peer connection was likely closed')
+                                break
+                            # Modbus length is in bytes 4 & 5 of the header according to spec (pg 25)
+                            # https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
+                            header = modbusdecoder.dissect_header(header)
+                            length = header['length']
+                            if length == 0:
+                                self.logger.debug('A length 0 header was read, closing connection')
+                                break
+                            data = connection.recv(length)
+                            is_error, dissection = self._dissect_packet(data)
+                            if is_error:
+                                self.logger.debug('An error was found in the modbus request {}'.format(dissection))
+                                connection.sendall(dissection)
+                                connection.close()
+                                break
+                            else:
+                                dissection['type'] = 'request'
+                                header['function_code'] = data[0]
+                                response = request_handler({
+                                    'header': header,
+                                    'body': dissection
+                                })
+                                connection.sendall(response)
+                        except IOError as e:
+                            self.logger.debug('An IO error occurred when reading the socket {}'.format(e))
+                            self.logger.debug('Closing connection')
+                            connection.close()
+                            break
 
     '''
         Breaks the server out of it's blocking accept call and sets the stop flag.
