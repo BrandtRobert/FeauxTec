@@ -2,7 +2,7 @@ import pandas as pd
 
 """
     In memory reference to a prerecord emissions table. The emissions table is specified in:
-    './Resources/CB_1W/emissions_<electronic_valve_name>..._<electronic_valve_name>.csv'
+    './Resources/Emissions/emissions_<electronic_valve_name>..._<electronic_valve_name>.csv'
 """
 
 

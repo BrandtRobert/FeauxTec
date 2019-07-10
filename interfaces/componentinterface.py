@@ -11,12 +11,18 @@ class ComponentBaseClass(abc.ABC):
     def get_full_name(self) -> str:
         return self.name
 
+    def get_prefix(self):
+        return self.name.split('.')[0]
+
+    def get_type(self):
+        return self.__class__.__name__
+
     @abc.abstractmethod
-    def get_type(self) -> str:
+    def get_reading(self):
         pass
 
     def __repr__(self) -> str:
         str(self)
 
     def __str__(self) -> str:
-        return '{}\n{}'.format(self.name, self.data)
+        return '{} ### {}'.format(self.name, self.get_reading())

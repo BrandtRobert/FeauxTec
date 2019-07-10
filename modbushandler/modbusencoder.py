@@ -1,6 +1,6 @@
 import struct
 from typing import Dict
-
+import re
 
 # Set's all the needed fields or puts in default values
 def _get_header_contents_or_default(header) -> Dict:
@@ -25,14 +25,33 @@ def respond_read_registers(header, registers, endianness='BIG'):
     endian_char = '>' if endianness == 'BIG' else '<'
     # get header contents or default
     header = _get_header_contents_or_default(header)
-    header['length'] = 3 + 2 * len(registers)
+
+    register_count = 0
+    for _, dtype in registers:
+        if '32' in dtype:
+            register_count = register_count + 32 // 8
+        elif '16' in dtype:
+            register_count = register_count + 16 // 8
+        else:
+            register_count = register_count + 8
+
+    header['length'] = 3 + register_count
 
     header = _pack_header(header, endian_char)
-    register_count = struct.pack(endian_char + 'b', len(registers) * 2)
+
+    register_count = struct.pack(endian_char + 'b', register_count)
 
     response = header + register_count
-    for register in registers:
-        response += struct.pack(endian_char + 'h', register)
+    for register, dtype in registers:
+        if dtype == 'FLOAT32':
+            response += struct.pack(endian_char + 'f', register)
+        elif dtype == 'UINT16':
+            response += struct.pack(endian_char + 'H', register)
+        elif dtype == 'UINT32':
+            response += struct.pack(endian_char + 'I', register)
+        else:
+            response += struct.pack(endian_char + 'H', register)
+
     return response
 
 

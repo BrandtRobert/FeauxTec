@@ -2,9 +2,10 @@ import pandas as pd
 from modbushandler import ModbusReceiver
 import modbushandler.modbusencoder as encoder
 import modbushandler.modbusdecoder as decoder
-from metecmodel import PnIdGraph
-from metecmodel import Component
-from typing import Dict
+from metecmodel import Model
+from interfaces import ComponentBaseClass
+import re
+from logger import set_up_logger
 
 
 class LabJack:
@@ -14,14 +15,30 @@ class LabJack:
     DEVICE_FUNCTION_CODES = [3, 4, 6, 16]
     ENDIANNESS = 'BIG'
 
-    def __init__(self, name, pins_to_registers_file, sensor_properties_file, physical_model):
+    def __init__(self, name, pins_to_registers_file, sensor_properties_file, physical_model, port):
         self.pins = pd.read_csv(pins_to_registers_file).set_index('start_address')
-        # Filter out DIO pins because they are duplicates, this is a temporary solution
-        self.pins = self.pins.loc[self.pins['pin'].str.contains('DIO[0-9]+$', regex=True) == False]
         # Only get sensors for this labjack reader
         self.sensors = pd.read_csv(sensor_properties_file).set_index('reader').loc[name]
         self.name = name
         self.model = physical_model
+        self.receiver = ModbusReceiver(port)
+        self.logger = set_up_logger('LabjackLogger', '../logger/logs/labjack_log.txt')
+        self.logger.info('Labjack created at port:{}'.format(port))
+
+    @staticmethod
+    def _DIO_to_ALT(dio_name) -> str:
+        # get DIO number
+        num = re.compile('.[A-Za-z]*([0-9]+)').search(dio_name).group(1)
+        num = int(num)
+        if 0 <= num <= 7:
+            return 'FIO' + str(num)
+        if 8 <= num <= 15:
+            return 'EIO' + str(num % 8)
+        if 16 <= num <= 19:
+            return 'CIO' + str(num % 16)
+        if 20 <= num <= 22:
+            return 'MIO' + str(num % 20)
+
 
     '''
         Converts a register address to a pin on the labjack.
@@ -34,6 +51,8 @@ class LabJack:
     def _registers_to_pins(self, register):
         try:
             pin = self.pins.loc[register]['pin']
+            if type(pin).__name__ == 'Series':
+                return pin.values[-1]
             return pin
         except KeyError:
             print('Start register {} is invalid'.format(register))
@@ -55,7 +74,11 @@ class LabJack:
         weird with the different 8, 16, and 32 bit data types. This method helps clear that up.
     '''
     def _get_next_pin(self, pin):
-        return self.pins.loc[self.pins['pin'] == pin]['next_pin'].values[0]
+        pin = self.pins.loc[self.pins['pin'] == pin]['next_pin'].values[0]
+        if 'DIO' in pin:
+            return self._DIO_to_ALT(pin)
+        else:
+            return pin
 
     '''
         Look up the component in the model using the pin and referencing the sensor properties file.
@@ -65,34 +88,24 @@ class LabJack:
         # We use '_' instead of '-' in the physical model as '-' gets confused in mathematical interpretations
         if len(sensor) == 0:
             return None
-        lookup_name = sensor['name'][0].replace('-', '_')
-        return self.model.get_node_component(lookup_name)
+        lookup_name = sensor['name'][0]
+        return self.model.get_component(lookup_name)
 
-    @staticmethod
-    def _read_from_component(component) -> int:
-        if 'reading' in component.data.keys():
-            reading = component.data['reading']
-            if 'offset' in component.data.keys():
-                reading = reading - component.data['offset']
-            if 'slope' in component.data.keys():
-                reading = reading / component.data['slope']
-        elif 'electronic-valve' in component.get_type():
-            reading = 1 if component.current_state is 'open' else 0
-        else:
-            reading = 0
-        return reading
+    def _read_from_sensor(self, component) -> int:
+        self.logger.debug('Attempting read from component type {}'.format(component.get_type()))
+        if component.get_type() not in ['PressureTransducer', 'Thermocouple', 'FlowMeter']:
+            raise Exception('Cannot read from non-sensor components')
+        self.logger.debug('Component reading {}'.format(component.get_reading()))
+        return component.get_reading()
 
-    def _write_to_component(self, component, value_to_set) -> Component:
+    def _write_to_component(self, component: ComponentBaseClass, value_to_set) -> ComponentBaseClass:
         # transfer values to model spec
-        if 'electronic-valve' in component.get_type():
-            value_to_set = 'open' if value_to_set != 0 else 'closed'
-            self.model.change_node_state(component.get_full_name(), value_to_set)
+        if component.get_type() == 'ElectricValve':
+            value_to_set = 'open' if value_to_set == 0 else 'closed'
+            self.model.set_valve(component.get_full_name(), value_to_set)
+            self.logger.debug('Write {} to component {}'.format(value_to_set, component))
         else:
-            if 'slope' in component.data.keys():
-                value_to_set = value_to_set * component.data['slope']
-            if 'offset' in component.data.keys():
-                value_to_set = value_to_set + component.data['offset']
-            component.data['reading'] = value_to_set
+            raise Exception('Cannot write to {} type components'.format(component.get_type()))
         return component
 
     '''
@@ -102,18 +115,32 @@ class LabJack:
     '''
     def _convert_register_count_to_pin_count(self, start_register, count):
         pin_count = 0
+        # use the indexing to jump over DIO pins when counting
         current_pin_record = self.pins.loc[start_register]
-        current_pin_record = self.pins.loc[self.pins['pin'] == current_pin_record['pin']]
+        if type(current_pin_record).__name__ == 'DataFrame':
+            current_pin_record = self.pins.loc[start_register][-1:].squeeze()
+        current_pin = current_pin_record['pin']
         while count > 0:
-            data_type = current_pin_record['data_type'].values[0]
+            data_type = current_pin_record['data_type']
             if '32' in data_type:
                 count = count - 2
             else:
                 count = count - 1
-            current_pin = self._get_next_pin(current_pin_record['pin'].values[0])
-            current_pin_record = self.pins.loc[self.pins['pin'] == current_pin]
             pin_count = pin_count + 1
+            current_pin = self._get_next_pin(current_pin)
+            current_pin_record = self.pins.loc[self.pins['pin'] == current_pin][-1:].T.squeeze()
         return pin_count
+
+    def _DIO_state_request(self, request_header):
+        # Use next pin as a work around to having to convert every DIO pin
+        pins = self.pins.loc[self.pins['pin'].str.contains('DIO[0-9]+$')]['next_pin'].values
+        bit_str = 0xFFFF
+        for idx, pin in enumerate(pins):
+            component = self._get_component_from_pin(pin)
+            if component and component.get_type() == 'ElectricValve' and component.get_reading() == 'open':
+                bit_str = bit_str ^ 0x1 << idx
+        self.logger.debug('DIO state request returning %s', bin(bit_str))
+        return encoder.respond_read_registers(request_header, [(bit_str, 'UINT32')], self.ENDIANNESS)
 
     '''
         Handles decoded Modbus requests and takes action based on requested methods.
@@ -127,67 +154,73 @@ class LabJack:
         Should return a message that can be sent back to the client, this message can be encoded with the 
         modbushandler.ModbusEncoder
     '''
-    def on_request(self, request) -> Dict:
+    def on_request(self, request):
         request_body = request['body']
         request_header = request['header']
         pin = self._registers_to_pins(request_body['address'])
-        component = self._get_component_from_pin(pin)
 
-        # read one register
-        if request_header['function_code'] == 4:
-            # rn if the reading is a 32 bit value then this is gonna break i believe
-            reading = self._read_from_component(component)
-            data_type = self.pins.loc[self.pins['pin'] == pin]['data_type'][0]
-            return encoder.respond_read_registers(request_header, [(reading, data_type)], self.ENDIANNESS)
-        # write one register
-        elif request_header['function_code'] == 6:
-            value_to_set = request_body['value']
-            self._write_to_component(component, value_to_set)
-            num_registers_written = 1
-            return encoder.respond_write_registers(request_header, request_body['address'], num_registers_written)
-        # write multiple
-        elif request_header['function_code'] == 16:
-            current_component = component
-            current_pin = pin
-            values = request_body['values']
-            pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
-            for i in range(pin_count):
-                value_to_set = values[i]
-                if current_component is not None:
-                    self._write_to_component(current_component, value_to_set)
-                current_pin = self._get_next_pin(current_pin)
-                current_component = self._get_component_from_pin(current_pin)
-            return encoder.respond_write_registers(request_header, request_body['address'], request_body['count'])
-        # read multiple
-        elif request_header['function_code'] == 3:
-            current_component = component
-            current_pin = pin
-            values = []
-            pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
-            for i in range(pin_count):
-                current_dtype = self.pins.loc[self.pins['pin'] == current_pin]['data_type'].values[0]
-                # Empty registers will be filled with 0's
-                if current_component is not None:
-                    values.append((self._read_from_component(current_component), current_dtype))
-                else:
-                    values.append((0x00, current_dtype))
-                current_pin = self._get_next_pin(current_pin)
-                current_component = self._get_component_from_pin(current_pin)
-            return encoder.respond_read_registers(request_header, values, self.ENDIANNESS)
-        else:
+        if re.compile('.*_STATE$').match(pin):
+            return self._DIO_state_request(request_header)
+        try:
+            # read one register
+            if request_header['function_code'] == 4:
+                component = self._get_component_from_pin(pin)
+                reading = self._read_from_sensor(component)
+                data_type = self.pins.loc[self.pins['pin'] == pin]['data_type'][0]
+                return encoder.respond_read_registers(request_header, [(reading, data_type)], self.ENDIANNESS)
+            # write one register
+            elif request_header['function_code'] == 6:
+                component = self._get_component_from_pin(pin)
+                value_to_set = request_body['value']
+                self._write_to_component(component, value_to_set)
+                num_registers_written = 1
+                return encoder.respond_write_registers(request_header, request_body['address'], num_registers_written)
+            # write multiple
+            elif request_header['function_code'] == 16:
+                current_component = self._get_component_from_pin(pin)
+                current_pin = pin
+                values = request_body['values']
+                pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
+                for i in range(pin_count):
+                    value_to_set = values[i]
+                    if current_component is not None:
+                        self._write_to_component(current_component, value_to_set)
+                    current_pin = self._get_next_pin(current_pin)
+                    current_component = self._get_component_from_pin(current_pin)
+                return encoder.respond_write_registers(request_header, request_body['address'], request_body['count'])
+            # read multiple
+            elif request_header['function_code'] == 3:
+                current_component = self._get_component_from_pin(pin)
+                current_pin = pin
+                values = []
+                pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
+                for i in range(pin_count):
+                    current_dtype = self.pins.loc[self.pins['pin'] == current_pin]['data_type'].values[0]
+                    # Empty registers will be filled with 0's
+                    if current_component is not None:
+                        values.append((self._read_from_sensor(current_component), current_dtype))
+                    else:
+                        values.append((0x00, current_dtype))
+                    current_pin = self._get_next_pin(current_pin)
+                    current_component = self._get_component_from_pin(current_pin)
+                return encoder.respond_read_registers(request_header, values, self.ENDIANNESS)
+            else:
+                return decoder.invalid_function_code([request_header['function_code']])[1]
+        except Exception:
             return decoder.invalid_function_code([request_header['function_code']])[1]
-
 
     '''
         Starts the modbus receiving server and sends on_request function as a callback.
         Server can be stopped with  
     '''
-    def start_server(self, port):
-        receiver = ModbusReceiver(port)
-        receiver.start_server(self.on_request)
+    def start_server(self):
+        self.receiver.start_server(self.on_request)
+
+    def stop_server(self):
+        self.receiver.stop_server()
 
 
 if __name__ == "__main__":
-    m = PnIdGraph('../Resources/volumes_CB_1W.json', 17.275, {'ambient_temperature': 75})
-    s = LabJack('CB-1W.LJ-1', '../Resources/pins_to_registers.csv', '../Resources/sensor_properties.csv', m)
-    s.start_server(502)
+    m = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json')
+    s = LabJack('CB-1W.LJ-1', '../Resources/pins_to_registers.csv', '../Resources/sensor_properties.csv', m, 502)
+    s.start_server()

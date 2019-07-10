@@ -1,0 +1,8 @@
+[DEBUG] 2019-07-10 12:25:56,217 - Flipping valve CB-1W.EV-22 now open
+[DEBUG] 2019-07-10 12:25:56,220 - Flipping valve CB-1W.EV-12 now open
+[DEBUG] 2019-07-10 12:25:56,222 - Flipping valve CB-1W.EV-31 now open
+[DEBUG] 2019-07-10 12:25:56,228 - Flipping valve CB-1W.EV-21 now open
+[DEBUG] 2019-07-10 12:26:02,610 - Request for emissions on controller box CB-1W
+[DEBUG] 2019-07-10 12:26:02,610 - 010
+[DEBUG] 2019-07-10 12:26:02,611 - 110
+[DEBUG] 2019-07-10 12:26:02,611 - 100
