@@ -1,6 +1,6 @@
 from metecmodel.pnidparser import PnIDParser
 from metecmodel.emissionstable import EmissionsTable
-from LegacyCode.component import Component
+from legacycode.component import Component
 from typing import List, Tuple
 import networkx as nx
 

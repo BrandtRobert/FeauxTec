@@ -1,0 +1,2 @@
+[INFO] 2019-07-10 12:25:50,927 - Server started Brandt.local:502
+[INFO] 2019-07-10 12:25:56,203 - New connection accepted ('127.0.0.1', 49506)

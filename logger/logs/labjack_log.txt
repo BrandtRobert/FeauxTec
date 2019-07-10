@@ -1,0 +1,5 @@
+[INFO] 2019-07-10 12:25:50,923 - Labjack created at port:502
+[DEBUG] 2019-07-10 12:25:56,217 - Write open to component CB-1W.EV-22 ### open
+[DEBUG] 2019-07-10 12:25:56,220 - Write open to component CB-1W.EV-12 ### open
+[DEBUG] 2019-07-10 12:25:56,223 - Write open to component CB-1W.EV-31 ### open
+[DEBUG] 2019-07-10 12:25:56,228 - Write open to component CB-1W.EV-21 ### open
