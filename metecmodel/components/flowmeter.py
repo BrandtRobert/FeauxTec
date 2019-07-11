@@ -1,4 +1,3 @@
-from typing import List
 from interfaces import ComponentBaseClass
 from metecmodel.graph import GraphNode
 

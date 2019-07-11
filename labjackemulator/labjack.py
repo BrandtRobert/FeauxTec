@@ -5,7 +5,7 @@ import modbushandler.modbusdecoder as decoder
 from metecmodel import Model
 from interfaces import ComponentBaseClass
 import re
-from logger import set_up_logger
+from logger import Logger
 
 
 class LabJack:
@@ -22,8 +22,9 @@ class LabJack:
         self.name = name
         self.model = physical_model
         self.receiver = ModbusReceiver(port)
-        self.logger = set_up_logger('LabjackLogger', '../logger/logs/labjack_log.txt')
-        self.logger.info('Labjack created at port:{}'.format(port))
+        self.logger = Logger('LabjackLogger-{}'.format(port), '../logger/logs/labjack_log.txt')
+        self.port = port
+        self.logger.info('Labjack created at port {}'.format(port))
 
     @staticmethod
     def _DIO_to_ALT(dio_name) -> str:
@@ -83,7 +84,7 @@ class LabJack:
     '''
         Look up the component in the model using the pin and referencing the sensor properties file.
     '''
-    def _get_component_from_pin(self, pin):
+    def _get_component_from_pin(self, pin) -> ComponentBaseClass:
         sensor = self._pin_to_sensor(pin)
         # We use '_' instead of '-' in the physical model as '-' gets confused in mathematical interpretations
         if len(sensor) == 0:
@@ -92,10 +93,10 @@ class LabJack:
         return self.model.get_component(lookup_name)
 
     def _read_from_sensor(self, component) -> int:
-        self.logger.debug('Attempting read from component type {}'.format(component.get_type()))
+        self.logger.debug('LJ:{} Attempting read from component type {}'.format(self.port, component.get_type()))
         if component.get_type() not in ['PressureTransducer', 'Thermocouple', 'FlowMeter']:
             raise Exception('Cannot read from non-sensor components')
-        self.logger.debug('Component reading {}'.format(component.get_reading()))
+        self.logger.debug('LJ:{} Component reading {}'.format(self.port, component.get_reading()))
         return component.get_reading()
 
     def _write_to_component(self, component: ComponentBaseClass, value_to_set) -> ComponentBaseClass:
@@ -103,7 +104,7 @@ class LabJack:
         if component.get_type() == 'ElectricValve':
             value_to_set = 'open' if value_to_set == 0 else 'closed'
             self.model.set_valve(component.get_full_name(), value_to_set)
-            self.logger.debug('Write {} to component {}'.format(value_to_set, component))
+            self.logger.debug('LJ:{} Write {} to component {}'.format(self.port, value_to_set, component))
         else:
             raise Exception('Cannot write to {} type components'.format(component.get_type()))
         return component
@@ -139,7 +140,7 @@ class LabJack:
             component = self._get_component_from_pin(pin)
             if component and component.get_type() == 'ElectricValve' and component.get_reading() == 'open':
                 bit_str = bit_str ^ 0x1 << idx
-        self.logger.debug('DIO state request returning %s', bin(bit_str))
+        self.logger.debug('LJ:{} DIO state request returning {}'.format(self.port, bin(bit_str)))
         return encoder.respond_read_registers(request_header, [(bit_str, 'UINT32')], self.ENDIANNESS)
 
     '''

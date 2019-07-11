@@ -2,7 +2,7 @@ from interfaces import ComponentBaseClass
 from .emissionstable import EmissionsTable
 from metecmodel.components import ElectricValve
 from typing import Dict
-from logger import set_up_logger
+from logger import Logger
 
 
 class ControllerBox:
@@ -13,7 +13,7 @@ class ControllerBox:
     def __init__(self, name: str, components: Dict = {}):
         self.name = name
         self.components = components
-        self.logger = set_up_logger('ModelLogger', '../logger/logs/model_log.txt')
+        self.logger = Logger('ModelLogger', '../logger/logs/model_log.txt')
 
     def get_name(self):
         return self.name
@@ -36,7 +36,6 @@ class ControllerBox:
             valve_str = ''.join(binary_str)
             file = 'emissions_{}_{}_row{}.csv'.format(len(rows), len(valves) + 1, row)
             valve_file.append((valve_str, file))
-            self.logger.debug('Evaluating emissions for row %s and valve states %s', row, valve_str)
         return valve_file
 
     def get_emissions(self, inlet_pressure):
@@ -46,7 +45,11 @@ class ControllerBox:
             valves_files = self._get_valves_and_file(range(1, 3), range(1, 5))
         else:
             return 0
+        i = 0
         emissions = []
         for valve_states, file in valves_files:
-            emissions.append(EmissionsTable('../Resources/Emissions/' + file).get_emissions(inlet_pressure, valve_states))
+            em = EmissionsTable('../Resources/Emissions/' + file).get_emissions(inlet_pressure, valve_states)
+            self.logger.info('Evaluating emissions (Controller Box: {}, Row {}) - {}'.format(self.name, i, em))
+            i = i + 1
+            emissions.append(em)
         return emissions

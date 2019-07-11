@@ -1,6 +1,6 @@
 import struct
 from typing import Dict
-import re
+
 
 # Set's all the needed fields or puts in default values
 def _get_header_contents_or_default(header) -> Dict:

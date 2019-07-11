@@ -3,7 +3,8 @@ from typing import Callable
 from modbushandler import modbusdecoder
 import threading
 from typing import Dict
-from logger import set_up_logger
+from logger import Logger
+from time import sleep
 
 
 class ModbusReceiver:
@@ -12,8 +13,10 @@ class ModbusReceiver:
         self.port = port
         self.localhost = localhost
         self.stop = threading.Event()
+        self.done = threading.Event()
         self.device_function_codes = device_function_codes
-        self.logger = set_up_logger('ServerLogger', '../logger/logs/server_log.txt')
+        self.logger = Logger('ServerLogger-{}'.format(port), '../logger/logs/server_log.txt', prefix='Server {}'.format(port))
+        self._current_connection = None
 
     '''
         Dispatches packet data for decoding based on it's function code.
@@ -54,15 +57,14 @@ class ModbusReceiver:
             else:
                 s.bind((socket.gethostname(), self.port))
             s.listen(5)
-            print('Starting server at {}:{}'.format(socket.gethostname(), self.port))
             self.logger.info('Server started {}:{}'.format(socket.gethostname(), self.port))
             while not self.stop.is_set():
-                connection, address = s.accept()
-                self.logger.info('New connection accepted {}'.format(connection.getpeername()))
-                with connection:
-                    while True:
+                self._current_connection, address = s.accept()
+                self.logger.info('New connection accepted {}'.format(self._current_connection.getpeername()))
+                with self._current_connection:
+                    while not self.stop.is_set():
                         try:
-                            header = connection.recv(7)
+                            header = self._current_connection.recv(7)
                             if header == b'' or len(header) <= 0:
                                 self.logger.debug('Initial read was empty, peer connection was likely closed')
                                 break
@@ -73,12 +75,12 @@ class ModbusReceiver:
                             if length == 0:
                                 self.logger.debug('A length 0 header was read, closing connection')
                                 break
-                            data = connection.recv(length)
+                            data = self._current_connection.recv(length)
                             is_error, dissection = self._dissect_packet(data)
                             if is_error:
                                 self.logger.debug('An error was found in the modbus request {}'.format(dissection))
-                                connection.sendall(dissection)
-                                connection.close()
+                                self._current_connection.sendall(dissection)
+                                self._current_connection.close()
                                 break
                             else:
                                 dissection['type'] = 'request'
@@ -87,29 +89,35 @@ class ModbusReceiver:
                                     'header': header,
                                     'body': dissection
                                 })
-                                connection.sendall(response)
+                                self._current_connection.sendall(response)
                         except IOError as e:
                             self.logger.debug('An IO error occurred when reading the socket {}'.format(e))
                             self.logger.debug('Closing connection')
-                            connection.close()
+                            self._current_connection.close()
                             break
+            self.done.set()
 
     '''
-        Breaks the server out of it's blocking accept call and sets the stop flag.
+        Breaks the server out of it's blocking accept or recv calls and sets the stop flag.
         In order to do this the method uses a 'dummy' connection to break the blocking call.
         It then sends a 'dummy' message that will lead to the method dropping the request and exiting.
         **NOTE**: This is especially useful when the server is being run on it's own thread.
     '''
     def stop_server(self) -> None:
+        self.logger.info('Stopping server now')
         self.stop.set()
+        if self._current_connection:
+            self._current_connection.close()
+        sleep(.5)
         # In order to stop the server we have to interrupt
         # The blocking socket.accept()
         # We create a connection that sends a header for a 0 length
         # Packet
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect(('localhost', self.port))
-            s.sendall(b'\x00\x01\x00\x00\x00\x00\x00')
-            s.close()
+        if not self.done.is_set():
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect(('localhost', self.port))
+                s.sendall(b'\x00\x01\x00\x00\x00\x00\x00')
+                s.close()
 
 
 if __name__ == '__main__':

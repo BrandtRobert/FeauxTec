@@ -1,6 +1,6 @@
 import abc
 from .componentinterface import ComponentBaseClass
-from typing import List
+from typing import List, Dict
 
 
 class ModelBaseClass(abc.ABC):
@@ -17,9 +17,13 @@ class ModelBaseClass(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def are_connected(self) -> bool:
+    def are_connected(self, node_a, node_b) -> bool:
         pass
 
     @abc.abstractmethod
     def set_valve(self, name, value) -> str:
+        pass
+
+    @abc.abstractmethod
+    def calculate_flows(self, gashouse) -> Dict:
         pass

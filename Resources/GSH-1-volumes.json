@@ -511,6 +511,7 @@ Json will have to be stripped of comments
       "COMMON": ["GSH-1.MV-21", "GSH-1.GCSAMPLEPORT"]}
     ]
   },
+  // GSH-1 gauges, transducers and couples
   {
     "ITEM": "GSH-1.PG-1",
     "STATES": [
@@ -619,6 +620,88 @@ Json will have to be stripped of comments
       }
     ]
   },
+  // GSH-1 regulators
+  {
+    "ITEM": "GSH-1.PR-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.PT-1", "GSH-1.VOL-4"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-2",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-7", "GSH-1.VOL-6"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-3",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-5", "GSH-1.VOL-8"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-4",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-15", "GSH-1.VOL-21"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-5",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-16", "GSH-1.VOL-23"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-6",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-17", "GSH-1.VOL-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-7",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-18", "GSH-1.VOL-27"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-8",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-19", "GSH-1.VOL-29"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-1.PR-9",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-1.VOL-20", "GSH-1.VOL-31"]
+      }
+    ]
+  },
   /*
      *************************************************
      ================== CB-1S ========================
@@ -628,7 +711,7 @@ Json will have to be stripped of comments
     "ITEM": "CB-1S.MV-1",
     "STATES": [
       {"STATE": "OPEN",
-       "COMMON": ["GSH-1.VOL-26", "VOL-1"]},
+       "COMMON": ["GSH-1.VOL-26", "CB-1S.VOL-1"]},
       {"STATE": "CLOSED",
        "COMMON":[]}
     ]
@@ -904,7 +987,7 @@ Json will have to be stripped of comments
     "ITEM": "CB-2S.MV-1",
     "STATES": [
       {"STATE": "OPEN",
-       "COMMON": ["GSH-1.VOL-32", "VOL-1"]},
+       "COMMON": ["GSH-1.VOL-32", "CB-2S.VOL-1"]},
       {"STATE": "CLOSED",
        "COMMON":[]}
     ]
@@ -1646,7 +1729,7 @@ Json will have to be stripped of comments
     "ITEM": "CB-1W.MV-1",
     "STATES": [
       {"STATE": "OPEN",
-       "COMMON": ["GSH-1.VOL-24", "VOL-1"]},
+       "COMMON": ["GSH-1.VOL-24", "CB-1W.VOL-1"]},
       {"STATE": "CLOSED",
        "COMMON":[]}
     ]
@@ -1940,7 +2023,7 @@ Json will have to be stripped of comments
     "ITEM": "CB-2W.MV-1",
     "STATES": [
       {"STATE": "OPEN",
-       "COMMON": ["GSH-1.VOL-28", "VOL-1"]},
+       "COMMON": ["GSH-1.VOL-28", "CB-2W.VOL-1"]},
       {"STATE": "CLOSED",
        "COMMON":[]}
     ]
