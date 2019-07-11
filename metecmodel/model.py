@@ -9,8 +9,6 @@ import threading
 
 class Model(ModelBaseClass):
 
-    instances = 0
-
     def __init__(self, sensor_properties: str, volumes_file: str,
                  initial_pressure=20, initial_temperature=75, initial_flow=15):
         self.initial_pressure = initial_pressure
@@ -19,7 +17,6 @@ class Model(ModelBaseClass):
         self.lock = threading.RLock()
         self.logger = Logger('ModelLogger-1', '../logger/logs/model_log.txt')
         self._init_model(sensor_properties, volumes_file)
-        self.instances = self.instances + 1
 
     def _create_component(self, name, info, neighbors) -> ComponentBaseClass:
         if info['item_type'] == 'Electric Valve':
@@ -123,16 +120,18 @@ class Model(ModelBaseClass):
             return {}
 
     def change_model_pressure(self, new_pressure):
+        self.initial_pressure = new_pressure
         for name, cb in self.controller_boxes.items():
             for _, component in cb.components.items():
                 if component.get_type() is 'PressureTransducer':
                     component.pressure = new_pressure
 
     def change_model_temperature(self, new_temp):
+        self.initial_temperature = new_temp
         for name, cb in self.controller_boxes.items():
             for _, component in cb.components.items():
                 if component.get_type() is 'Thermocouple':
-                    component.pressure = new_temp
+                    component.temperature = new_temp
 
 
 if __name__ == '__main__':
