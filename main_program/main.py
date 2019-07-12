@@ -5,11 +5,7 @@ from labjackemulator import LabJack
 from main_program.labjackthread import LabJackThread
 
 
-
-
 if __name__ == '__main__':
-
-
 
     model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json')
 
