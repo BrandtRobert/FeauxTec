@@ -97,11 +97,11 @@ class LabJack:
         if component.get_type() not in ['PressureTransducer', 'Thermocouple', 'FlowMeter']:
             raise Exception('Cannot read from non-sensor components')
         self.logger.debug('LJ:{} Component reading {}'.format(self.port, component.get_reading()))
-        return component.get_reading()
+        return component.get_reading_voltage()
 
     def _write_to_component(self, component: ComponentBaseClass, value_to_set) -> ComponentBaseClass:
         # transfer values to model spec
-        if component.get_type() == 'ElectricValve':
+        if component.get_type() == 'ElectricValve' or component.get_type() == 'ThreeWayElectricValve':
             value_to_set = 'open' if value_to_set == 0 else 'closed'
             self.model.set_valve(component.get_full_name(), value_to_set)
             self.logger.debug('LJ:{} Write {} to component {}'.format(self.port, value_to_set, component))
@@ -135,11 +135,12 @@ class LabJack:
     def _DIO_state_request(self, request_header):
         # Use next pin as a work around to having to convert every DIO pin
         pins = self.pins.loc[self.pins['pin'].str.contains('DIO[0-9]+$')]['next_pin'].values
-        bit_str = 0xFFFF
+        bit_str = 0xFFFFFFFF
         for idx, pin in enumerate(pins):
             component = self._get_component_from_pin(pin)
-            if component and component.get_type() == 'ElectricValve' and component.get_reading() == 'open':
-                bit_str = bit_str ^ 0x1 << idx
+            if component and 'ElectricValve' in component.get_type():
+                if component.get_reading() == 'open' or component.get_reading() == 'b':
+                    bit_str = bit_str ^ 0x1 << idx
         self.logger.debug('LJ:{} DIO state request returning {}'.format(self.port, bin(bit_str)))
         return encoder.respond_read_registers(request_header, [(bit_str, 'UINT32')], self.ENDIANNESS)
 
@@ -167,7 +168,7 @@ class LabJack:
             if request_header['function_code'] == 4:
                 component = self._get_component_from_pin(pin)
                 reading = self._read_from_sensor(component)
-                data_type = self.pins.loc[self.pins['pin'] == pin]['data_type'][0]
+                data_type = self.pins.loc[self.pins['pin'] == pin]['data_type'].values[0]
                 return encoder.respond_read_registers(request_header, [(reading, data_type)], self.ENDIANNESS)
             # write one register
             elif request_header['function_code'] == 6:
@@ -207,8 +208,10 @@ class LabJack:
                 return encoder.respond_read_registers(request_header, values, self.ENDIANNESS)
             else:
                 return decoder.invalid_function_code([request_header['function_code']])[1]
-        except Exception:
-            return decoder.invalid_function_code([request_header['function_code']])[1]
+        except Exception as e:
+            print('Exception occurred:\n{}'.format(e))
+            raise e
+            # return decoder.invalid_function_code([request_header['function_code']])[1]
 
     '''
         Starts the modbus receiving server and sends on_request function as a callback.

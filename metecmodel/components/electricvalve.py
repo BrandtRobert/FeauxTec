@@ -26,3 +26,9 @@ class ElectricValve(ComponentBaseClass, GraphNode):
         else:
             return self.neighbors['closed']
 
+    def get_reading_voltage(self):
+        reading = self.get_reading()
+        if reading is 'open':
+            return 0
+        else:
+            return 1

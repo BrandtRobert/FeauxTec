@@ -11,7 +11,7 @@ class ThreeWayElectricValve(ComponentBaseClass, GraphNode):
         self.state = initial_state
 
     def get_reading(self) -> str:
-        self.state
+        return self.state
 
     def flip_valve(self) -> str:
         if self.state == 'a':

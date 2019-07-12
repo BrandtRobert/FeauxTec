@@ -1,9 +1,16 @@
+import sys
+sys.path.insert(0, '/var/root/PycharmProjects/metec_model')
 from metecmodel import Model
 from labjackemulator import LabJack
 from main_program.labjackthread import LabJackThread
 
 
+
+
 if __name__ == '__main__':
+
+
+
     model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json')
 
     labjack_names_ports = {

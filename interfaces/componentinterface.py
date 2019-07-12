@@ -21,6 +21,9 @@ class ComponentBaseClass(abc.ABC):
     def get_reading(self):
         pass
 
+    def get_reading_voltage(self):
+        return self.get_reading()
+
     def __repr__(self) -> str:
         str(self)
 
