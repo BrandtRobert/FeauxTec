@@ -9,7 +9,7 @@ from time import sleep
 
 class ModbusReceiver:
 
-    def __init__(self, port, localhost=True, device_function_codes=None):
+    def __init__(self, port, localhost=True, device_function_codes=None, socket_type=socket.SOCK_STREAM):
         self.port = port
         self.localhost = localhost
         self.stop = threading.Event()
@@ -17,6 +17,7 @@ class ModbusReceiver:
         self.device_function_codes = device_function_codes
         self.logger = Logger('ServerLogger-{}'.format(port), '../logger/logs/server_log.txt', prefix='Server {}'.format(port))
         self._current_connection = None
+        self.socket_type = socket_type
 
     '''
         Dispatches packet data for decoding based on it's function code.
@@ -43,13 +44,7 @@ class ModbusReceiver:
         function = switch.get(function_code, modbusdecoder.invalid_function_code)
         return function(packet_data)
 
-    '''
-        Starts the Modbus server and listens for packets over a TCP/IP connection. By default it will bind to
-        localhost at a port specified in the constructor. Upon receiving a modbus message it will decode the header
-        and send the function code and data to the _dissect_packet function for further processing. Error packets
-        lead to an immediate response with an error code, while valid requests are sent back to the request handler.
-    '''
-    def start_server(self, request_handler: Callable) -> None:
+    def _start_server_tcp(self, request_handler: Callable) -> None:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             if self.localhost:
@@ -79,8 +74,8 @@ class ModbusReceiver:
                             is_error, dissection = self._dissect_packet(data)
                             if is_error:
                                 self.logger.debug('An error was found in the modbus request {}'.format(dissection))
+                                self.logger.debug('Header appears like: {}'.format(header))
                                 self._current_connection.sendall(dissection)
-                                self._current_connection.close()
                                 break
                             else:
                                 dissection['type'] = 'request'
@@ -96,6 +91,59 @@ class ModbusReceiver:
                             self._current_connection.close()
                             break
             self.done.set()
+
+    def _start_server_udp(self, request_handler: Callable) -> None:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            if self.localhost:
+                s.bind(('localhost', self.port))
+                self.logger.debug('Starting UDP server at localhost:{}'.format(self.port))
+            else:
+                s.bind((socket.gethostname(), self.port))
+                self.logger.debug('Starting UDP server at {}:{}'.format(socket.gethostname(), self.port))
+            while not self.stop.is_set():
+                try:
+                    buffer, address = s.recvfrom(256)
+                    self.logger.debug('Message received from: {}'.format(address))
+                    if buffer == b'' or len(buffer) <= 0:
+                        self.logger.debug('Initial read was empty, peer connection was likely closed')
+                        break
+                    header = buffer[:7]
+                    header = modbusdecoder.dissect_header(header)
+                    length = header['length']
+                    if length == 0:
+                        self.logger.debug('Length 0 message received')
+                        break
+                    data = buffer[7: 7 + length]
+                    is_error, dissection = self._dissect_packet(data)
+                    if is_error:
+                        self.logger.debug('An error was found in the modbus request {}'.format(dissection))
+                        self.logger.debug('Header appears like: {}'.format(header))
+                        self._current_connection.sendall(dissection)
+                        break
+                    else:
+                        dissection['type'] = 'request'
+                        header['function_code'] = data[0]
+                        response = request_handler({
+                            'header': header,
+                            'body': dissection
+                        })
+                        self.logger.debug('Sending response {}'.format(response))
+                        s.sendto(response, address)
+                except IOError as e:
+                    self.logger.warning('An IO error occured with the socket {}'.format(e))
+                    continue
+    '''
+        Starts the Modbus server and listens for packets over a TCP/IP connection. By default it will bind to
+        localhost at a port specified in the constructor. Upon receiving a modbus message it will decode the header
+        and send the function code and data to the _dissect_packet function for further processing. Error packets
+        lead to an immediate response with an error code, while valid requests are sent back to the request handler.
+    '''
+    def start_server(self, request_handler: Callable) -> None:
+        if self.socket_type == socket.SOCK_STREAM:
+            self._start_server_tcp(request_handler)
+        else:
+            self._start_server_udp(request_handler)
 
     '''
         Breaks the server out of it's blocking accept or recv calls and sets the stop flag.
@@ -113,16 +161,20 @@ class ModbusReceiver:
         # The blocking socket.accept()
         # We create a connection that sends a header for a 0 length
         # Packet
-        if not self.done.is_set():
+        if not self.done.is_set() and self.socket_type == socket.SOCK_STREAM:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect(('localhost', self.port))
+                if self.localhost:
+                    s.connect(('localhost', self.port))
+                else:
+                    s.connect((socket.gethostname(), self.port))
                 s.sendall(b'\x00\x01\x00\x00\x00\x00\x00')
                 s.close()
 
 
 if __name__ == '__main__':
-    m = ModbusReceiver(8080)
+    m = ModbusReceiver(8080, socket_type=socket.SOCK_DGRAM)
 
     def handler(msg):
         print(msg)
+        return b'received'
     m.start_server(handler)

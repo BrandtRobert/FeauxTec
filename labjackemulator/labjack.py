@@ -5,6 +5,7 @@ import modbushandler.modbusdecoder as decoder
 from metecmodel import Model
 from interfaces import ComponentBaseClass
 import re
+import socket
 from logger import Logger
 
 
@@ -15,13 +16,15 @@ class LabJack:
     DEVICE_FUNCTION_CODES = [3, 4, 6, 16]
     ENDIANNESS = 'BIG'
 
-    def __init__(self, name, pins_to_registers_file, sensor_properties_file, physical_model, port):
+    def __init__(self, name, pins_to_registers_file, sensor_properties_file, physical_model, port,
+                 localhost=True, socket_type=socket.SOCK_STREAM):
         self.pins = pd.read_csv(pins_to_registers_file).set_index('start_address')
         # Only get sensors for this labjack reader
         self.sensors = pd.read_csv(sensor_properties_file).set_index('reader').loc[name]
         self.name = name
         self.model = physical_model
-        self.receiver = ModbusReceiver(port)
+        self.receiver = ModbusReceiver(port, localhost=localhost, device_function_codes=self.DEVICE_FUNCTION_CODES,
+                                       socket_type=socket_type)
         self.logger = Logger('LabjackLogger-{}'.format(port), '../logger/logs/labjack_log.txt')
         self.port = port
         self.logger.info('Labjack created at port {}'.format(port))
@@ -86,7 +89,6 @@ class LabJack:
     '''
     def _get_component_from_pin(self, pin) -> ComponentBaseClass:
         sensor = self._pin_to_sensor(pin)
-        # We use '_' instead of '-' in the physical model as '-' gets confused in mathematical interpretations
         if len(sensor) == 0:
             return None
         lookup_name = sensor['name'][0]
@@ -159,6 +161,11 @@ class LabJack:
     def on_request(self, request):
         request_body = request['body']
         request_header = request['header']
+
+        if request_body['address'] == 60000:
+            self.logger.info('Request for hardware version returning 0')
+            return encoder.respond_read_registers(request_header, [(0, 'FLOAT32')], self.ENDIANNESS)
+
         pin = self._registers_to_pins(request_body['address'])
 
         if re.compile('.*_STATE$').match(pin):

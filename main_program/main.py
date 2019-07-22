@@ -3,23 +3,28 @@ sys.path.insert(0, '/var/root/PycharmProjects/metec_model')
 from metecmodel import Model
 from labjackemulator import LabJack
 from main_program.labjackthread import LabJackThread
-
+import socket
 
 if __name__ == '__main__':
 
-    model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json')
+    model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json', initial_pressure=50, initial_temperature=30)
 
     labjack_names_ports = {
+        'GSH-1.LJ-1': 501,
         'CB-1W.LJ-1': 502,
         'CB-1T.LJ-1': 503,
-        'CB-1S.LJ-1': 504
+        'CB-1S.LJ-1': 504,
+        'CB-2W.LJ-1': 505,
+        'CB-2T.LJ-1': 506,
+        'CB-2S.LJ-1': 507
     }
 
     labjack_threads = []
 
     for name, port in labjack_names_ports.items():
         labjack = LabJack(name, '../Resources/pins_to_registers.csv',
-                          '../Resources/sensor_properties.csv', model, port)
+                          '../Resources/sensor_properties.csv', model, port, localhost=False,
+                          socket_type=socket.SOCK_DGRAM)
         lj_thread = LabJackThread(labjack)
         labjack_threads.append(lj_thread)
         lj_thread.start()
@@ -44,7 +49,6 @@ if __name__ == '__main__':
                     print('Exiting...')
                     for lj_thread in labjack_threads:
                         lj_thread.stop()
-                        lj_thread.join(5)
                     exit()
                 if char == 'C':
                     first_component = input('Input the name of the first component: ')
@@ -71,5 +75,4 @@ if __name__ == '__main__':
         print('Execution interrupted, exiting now...')
         for lj_thread in labjack_threads:
             lj_thread.stop()
-            lj_thread.join(5)
         exit()
