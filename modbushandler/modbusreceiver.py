@@ -128,8 +128,10 @@ class ModbusReceiver:
                             'header': header,
                             'body': dissection
                         })
-                        self.logger.debug('Sending response {}'.format(response))
                         s.sendto(response, address)
+                        self.logger.debug('MB:{} Request: {}'.format(self.port, buffer[:7+length]))
+                        self.logger.debug('MB:{} Header: {} Body:{}'.format(self.port, header, dissection))
+                        self.logger.debug('MB:{} Responding: {}'.format(self.port, response))
                 except IOError as e:
                     self.logger.warning('An IO error occured with the socket {}'.format(e))
                     continue

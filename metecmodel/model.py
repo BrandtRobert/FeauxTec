@@ -90,14 +90,15 @@ class Model(ModelBaseClass):
                 raise KeyError('{} not in model'.format(cb_name))
 
     def set_valve(self, name, value) -> str:
-        valve = self.get_component(name)
-        if valve.get_type == 'ThreeWayElectricValve':
-            value = 'b' if value == 'open' else 'a'
-        if value != valve.get_reading():
-            valve.flip_valve()
-            self.logger.debug('Flipping valve {} now {}'.format(name, valve.get_reading()))
-            self.graph.redraw_edges(name, valve.get_neighbors())
-        return valve.get_reading()
+        with self.lock:
+            valve = self.get_component(name)
+            if valve.get_type == 'ThreeWayElectricValve':
+                value = 'b' if value == 'open' else 'a'
+            if value != valve.get_reading():
+                valve.flip_valve()
+                self.logger.debug('Flipping valve {} now {}'.format(name, valve.get_reading()))
+                self.graph.redraw_edges(name, valve.get_neighbors())
+            return valve.get_reading()
 
     def are_connected(self, node_a, node_b) -> bool:
         return self.graph.are_connected(node_a, node_b)

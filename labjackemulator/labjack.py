@@ -19,6 +19,8 @@ class LabJack:
     def __init__(self, name, pins_to_registers_file, sensor_properties_file, physical_model, port,
                  localhost=True, socket_type=socket.SOCK_STREAM):
         self.pins = pd.read_csv(pins_to_registers_file).set_index('start_address')
+        self.pins['data'] = 0
+        self.pins.loc['pin' == 'HARDWARE_VERSION', 'data'] = 1.35
         # Only get sensors for this labjack reader
         self.sensors = pd.read_csv(sensor_properties_file).set_index('reader').loc[name]
         self.name = name
@@ -54,7 +56,7 @@ class LabJack:
     '''
     def _registers_to_pins(self, register):
         try:
-            pin = self.pins.loc[register]['pin']
+            pin = self.pins.loc[register, 'pin']
             if type(pin).__name__ == 'Series':
                 return pin.values[-1]
             return pin
@@ -83,6 +85,12 @@ class LabJack:
             return self._DIO_to_ALT(pin)
         else:
             return pin
+
+    def _get_next_register(self, register):
+        pin = self._registers_to_pins(register)
+        next_pin = self._get_next_pin(pin)
+        next_register = self.pins[self.pins['pin'] == next_pin].index[0]
+        return next_register
 
     '''
         Look up the component in the model using the pin and referencing the sensor properties file.
@@ -146,6 +154,31 @@ class LabJack:
         self.logger.debug('LJ:{} DIO state request returning {}'.format(self.port, bin(bit_str)))
         return encoder.respond_read_registers(request_header, [(bit_str, 'UINT32')], self.ENDIANNESS)
 
+    def _read_write_register(self, register_address, write_value=None):
+        # self.logger.debug('Request at address {}'.format(register_address))
+        pin = self._registers_to_pins(register_address)
+        if 'EF_READ_A' in pin and write_value is None:
+            pin = pin.split('_')[0]
+        component = self._get_component_from_pin(pin)
+        data_type = self.pins.loc[register_address, 'data_type']
+        if type(data_type).__name__ == 'Series':
+            data_type = data_type.values[0]
+        if component:
+            if write_value is not None:
+                return self._write_to_component(component, write_value), data_type
+            else:
+                return self._read_from_sensor(component), data_type
+        else:
+            if write_value is not None:
+                self.pins.loc[register_address, 'data'] = write_value
+                self.logger.debug('LJ:{} Writing to non-component register {} value now {}'
+                                  .format(self.port, register_address, self.pins.loc[register_address, 'data']))
+                return write_value, data_type
+            else:
+                self.logger.debug('LJ:{} Read from non component register {} value {}'
+                                  .format(self.port, register_address, self.pins.loc[register_address, 'data']))
+                return self.pins.loc[register_address, 'data'], data_type
+
     '''
         Handles decoded Modbus requests and takes action based on requested methods.
         TCP/IP communicates are handled in modbushandler.ModbusReceiver, this function is a callback
@@ -162,62 +195,48 @@ class LabJack:
         request_body = request['body']
         request_header = request['header']
 
-        if request_body['address'] == 60000:
-            self.logger.info('Request for hardware version returning 0')
-            return encoder.respond_read_registers(request_header, [(0, 'FLOAT32')], self.ENDIANNESS)
+        # if request_body['address'] == 60000:
+        #     self.logger.info('Request for hardware version returning 0')
+        #     return encoder.respond_read_registers(request_header, [(0, 'FLOAT32')], self.ENDIANNESS)
 
         pin = self._registers_to_pins(request_body['address'])
-
         if re.compile('.*_STATE$').match(pin):
             return self._DIO_state_request(request_header)
         try:
             # read one register
             if request_header['function_code'] == 4:
-                component = self._get_component_from_pin(pin)
-                reading = self._read_from_sensor(component)
-                data_type = self.pins.loc[self.pins['pin'] == pin]['data_type'].values[0]
+                reading, data_type = self._read_write_register(request_body['address'])
                 return encoder.respond_read_registers(request_header, [(reading, data_type)], self.ENDIANNESS)
             # write one register
             elif request_header['function_code'] == 6:
-                component = self._get_component_from_pin(pin)
-                value_to_set = request_body['value']
-                self._write_to_component(component, value_to_set)
+                self._read_write_register(request_body['address'], request_body['value'])
                 num_registers_written = 1
                 return encoder.respond_write_registers(request_header, request_body['address'], num_registers_written)
             # write multiple
             elif request_header['function_code'] == 16:
-                current_component = self._get_component_from_pin(pin)
-                current_pin = pin
+                current_register = request_body['address']
                 values = request_body['values']
                 pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
                 for i in range(pin_count):
                     value_to_set = values[i]
-                    if current_component is not None:
-                        self._write_to_component(current_component, value_to_set)
-                    current_pin = self._get_next_pin(current_pin)
-                    current_component = self._get_component_from_pin(current_pin)
+                    self._read_write_register(current_register, value_to_set)
+                    current_register = self._get_next_register(current_register)
                 return encoder.respond_write_registers(request_header, request_body['address'], request_body['count'])
             # read multiple
             elif request_header['function_code'] == 3:
-                current_component = self._get_component_from_pin(pin)
-                current_pin = pin
+                current_register = request_body['address']
                 values = []
                 pin_count = self._convert_register_count_to_pin_count(request_body['address'], request_body['count'])
                 for i in range(pin_count):
-                    current_dtype = self.pins.loc[self.pins['pin'] == current_pin]['data_type'].values[0]
-                    # Empty registers will be filled with 0's
-                    if current_component is not None:
-                        values.append((self._read_from_sensor(current_component), current_dtype))
-                    else:
-                        values.append((0x00, current_dtype))
-                    current_pin = self._get_next_pin(current_pin)
-                    current_component = self._get_component_from_pin(current_pin)
+                    reading, current_dtype = self._read_write_register(current_register)
+                    values.append((reading, current_dtype))
+                    current_register = self._get_next_register(current_register)
                 return encoder.respond_read_registers(request_header, values, self.ENDIANNESS)
             else:
                 return decoder.invalid_function_code([request_header['function_code']])[1]
         except Exception as e:
             print('Exception occurred:\n{}'.format(e))
-            raise e
+            # error responses possible?
             # return decoder.invalid_function_code([request_header['function_code']])[1]
 
     '''

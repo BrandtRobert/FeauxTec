@@ -18,6 +18,7 @@ class Thermocouple(ComponentBaseClass, GraphNode):
         return self.temperature
 
     def get_reading_voltage(self) -> float:
-        reading = self.get_reading()
-        reading = reading - self.data['offset']
-        return reading / self.data['slope']
+        return self.get_reading()
+        # reading = self.get_reading()
+        # reading = reading - self.data['offset']
+        # return reading / self.data['slope']

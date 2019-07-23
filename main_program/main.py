@@ -7,7 +7,8 @@ import socket
 
 if __name__ == '__main__':
 
-    model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json', initial_pressure=50, initial_temperature=30)
+    model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json', initial_pressure=50,
+                  initial_temperature=30)
 
     labjack_names_ports = {
         'GSH-1.LJ-1': 501,
