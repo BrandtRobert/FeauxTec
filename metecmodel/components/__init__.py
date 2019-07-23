@@ -3,3 +3,4 @@ from .threewayelectricvalve import ThreeWayElectricValve
 from .flowmeter import FlowMeter
 from .pressuretransducer import PressureTransducer
 from .thermocouple import Thermocouple
+from .manualvalve import ManualValve

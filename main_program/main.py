@@ -25,7 +25,7 @@ if __name__ == '__main__':
     for name, port in labjack_names_ports.items():
         labjack = LabJack(name, '../Resources/pins_to_registers.csv',
                           '../Resources/sensor_properties.csv', model, port, localhost=False,
-                          socket_type=socket.SOCK_DGRAM)
+                          socket_type=socket.SOCK_STREAM)
         lj_thread = LabJackThread(labjack)
         labjack_threads.append(lj_thread)
         lj_thread.start()
@@ -39,6 +39,8 @@ if __name__ == '__main__':
                              'N to get a components neighbors\n'
                              'F to calculate flows\n'
                              'P to set model pressure (psi)\n'
+                             'T to set model temperature (F)\n'
+                             'V to set a valve state\n'
                              'Q to quit\n')
                 char = char.upper()
                 if char == 'E':
@@ -70,6 +72,13 @@ if __name__ == '__main__':
                 if char == 'P':
                     pressure = float(input('Enter new model pressure: '))
                     model.change_model_pressure(pressure)
+                if char == 'T':
+                    temp = float(input('Enter new temperature: '))
+                    model.change_model_temperature(temp)
+                if char == 'V':
+                    valve_name = input('Enter the valve name: ')
+                    state = input("'open' or 'close': ")
+                    print('Valve now:', model.set_valve(valve_name, state))
             except Exception as e:
                 print(e)
     except KeyboardInterrupt:

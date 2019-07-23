@@ -106,6 +106,8 @@ class LabJack:
         self.logger.debug('LJ:{} Attempting read from component type {}'.format(self.port, component.get_type()))
         if component.get_type() not in ['PressureTransducer', 'Thermocouple', 'FlowMeter']:
             raise Exception('Cannot read from non-sensor components')
+        if component.get_type():
+            self.model.calculate_flows('GSH-1') # add component attribute for it's parent gashouse
         self.logger.debug('LJ:{} Component reading {}'.format(self.port, component.get_reading()))
         return component.get_reading_voltage()
 

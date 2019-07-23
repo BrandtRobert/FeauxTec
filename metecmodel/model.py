@@ -30,6 +30,11 @@ class Model(ModelBaseClass):
             component = Thermocouple(name, neighbors, info, initial_temp=self.initial_temperature)
         elif info['item_type'] == 'Flow Meter':
             component = FlowMeter(name, neighbors, info, initial_flow=self.initial_flow)
+        elif info['item_type'] == 'Manual Valve':
+            if 'a' in neighbors:
+                component = ManualValve(name, neighbors, info, initial_state='a')
+            else:
+                component = ManualValve(name, neighbors, info, initial_state='open')
         else:
             return None
         return component
@@ -47,10 +52,13 @@ class Model(ModelBaseClass):
             else:
                 # If not add it manually, manual valves will be set to open by default
                 if 'MV' in item:
-                    if 'open' in neighbors:
-                        current_neighbors = neighbors['open']
-                    if 'a' in neighbors:
-                        current_neighbors = neighbors['a']
+                    valve = self._create_component(item, {'item_type': 'Manual Valve'}, neighbors)
+                    self.controller_boxes[valve.get_prefix()].add_component(valve)
+                    current_neighbors = valve.get_neighbors()
+                    # if 'open' in neighbors:
+                    #     current_neighbors = neighbors['open']
+                    # if 'a' in neighbors:
+                    #     current_neighbors = neighbors['a']
                 else:
                     current_neighbors = neighbors
                 self.graph.add_node(item, current_neighbors)

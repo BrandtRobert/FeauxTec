@@ -97,7 +97,7 @@ class ModbusReceiver:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             if self.localhost:
                 s.bind(('localhost', self.port))
-                self.logger.debug('Starting UDP server at localhost:{}'.format(self.port))
+                self.logger.info('Starting UDP server at localhost:{}'.format(self.port))
             else:
                 s.bind((socket.gethostname(), self.port))
                 self.logger.debug('Starting UDP server at {}:{}'.format(socket.gethostname(), self.port))
@@ -133,8 +133,9 @@ class ModbusReceiver:
                         self.logger.debug('MB:{} Header: {} Body:{}'.format(self.port, header, dissection))
                         self.logger.debug('MB:{} Responding: {}'.format(self.port, response))
                 except IOError as e:
-                    self.logger.warning('An IO error occured with the socket {}'.format(e))
+                    self.logger.warning('An IO error occurred with the socket {}'.format(e))
                     continue
+        self.done.set()
     '''
         Starts the Modbus server and listens for packets over a TCP/IP connection. By default it will bind to
         localhost at a port specified in the constructor. Upon receiving a modbus message it will decode the header
