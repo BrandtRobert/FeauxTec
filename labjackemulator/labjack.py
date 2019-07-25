@@ -7,7 +7,7 @@ from interfaces import ComponentBaseClass
 import re
 import socket
 from logger import Logger
-
+import random
 
 class LabJack:
 
@@ -17,7 +17,7 @@ class LabJack:
     ENDIANNESS = 'BIG'
 
     def __init__(self, name, pins_to_registers_file, sensor_properties_file, physical_model, port,
-                 localhost=True, socket_type=socket.SOCK_STREAM):
+                 localhost=True, socket_type=socket.SOCK_STREAM, noise_factor=0):
         self.pins = pd.read_csv(pins_to_registers_file).set_index('start_address')
         self.pins['data'] = 0
         self.pins.loc['pin' == 'HARDWARE_VERSION', 'data'] = 1.35
@@ -30,6 +30,7 @@ class LabJack:
         self.logger = Logger('LabjackLogger-{}'.format(port), '../logger/logs/labjack_log.txt')
         self.port = port
         self.logger.info('Labjack created at port {}'.format(port))
+        self.noise_factor = noise_factor
 
     @staticmethod
     def _DIO_to_ALT(dio_name) -> str:
@@ -106,10 +107,13 @@ class LabJack:
         self.logger.debug('LJ:{} Attempting read from component type {}'.format(self.port, component.get_type()))
         if component.get_type() not in ['PressureTransducer', 'Thermocouple', 'FlowMeter']:
             raise Exception('Cannot read from non-sensor components')
-        if component.get_type():
+        if component.get_type() == 'FlowMeter':
             self.model.calculate_flows('GSH-1') # add component attribute for it's parent gashouse
         self.logger.debug('LJ:{} Component reading {}'.format(self.port, component.get_reading()))
-        return component.get_reading_voltage()
+        noised_reading = component.get_reading_voltage() + \
+            (component.get_reading_voltage() * random.uniform(-self.noise_factor, self.noise_factor))
+        self.logger.debug('LJ:{} Component reading noised in volts {}'.format(self.port, noised_reading))
+        return noised_reading
 
     def _write_to_component(self, component: ComponentBaseClass, value_to_set) -> ComponentBaseClass:
         # transfer values to model spec

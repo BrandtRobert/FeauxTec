@@ -33,7 +33,7 @@ if __name__ == '__main__':
     for name, port in labjack_names_ports.items():
         labjack = LabJack(name, '../Resources/pins_to_registers.csv',
                           '../Resources/sensor_properties.csv', model, port, localhost=False,
-                          socket_type=socket.SOCK_STREAM)
+                          socket_type=socket.SOCK_STREAM, noise_factor=0.05)
         lj_thread = LabJackThread(labjack)
         labjack_threads.append(lj_thread)
         lj_thread.start()
