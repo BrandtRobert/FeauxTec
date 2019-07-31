@@ -5,6 +5,7 @@ import threading
 from typing import Dict
 from logger import Logger
 from time import sleep
+from modbushandler.util import stringify_bytes
 
 
 class ModbusReceiver:
@@ -59,10 +60,12 @@ class ModbusReceiver:
                 with self._current_connection:
                     while not self.stop.is_set():
                         try:
-                            header = self._current_connection.recv(7)
-                            if header == b'' or len(header) <= 0:
+                            buffer = self._current_connection.recv(7)
+                            if buffer == b'' or len(buffer) <= 0:
                                 self.logger.debug('Initial read was empty, peer connection was likely closed')
                                 break
+                            header = buffer
+                            self.logger.debug('MB:{} Header DATA like: {}'.format(self.port, header))
                             # Modbus length is in bytes 4 & 5 of the header according to spec (pg 25)
                             # https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
                             header = modbusdecoder.dissect_header(header)
@@ -70,13 +73,16 @@ class ModbusReceiver:
                             if length == 0:
                                 self.logger.debug('A length 0 header was read, closing connection')
                                 break
-                            data = self._current_connection.recv(length)
+                            data = self._current_connection.recv(length-1)
                             is_error, dissection = self._dissect_packet(data)
                             if is_error:
-                                self.logger.debug('An error was found in the modbus request {}'.format(dissection))
-                                self.logger.debug('Header appears like: {}'.format(header))
+                                self.logger.debug('MB:{} Header appears like: {}'.format(self.port, header))
+                                self.logger.debug(
+                                    'MB:{} Request: {}'.format(self.port, stringify_bytes(buffer + data)))
+                                self.logger.debug(
+                                    'MB:{} An error was found in the modbus request {}'.format(self.port, stringify_bytes(dissection)))
                                 self._current_connection.sendall(dissection)
-                                break
+                                continue
                             else:
                                 dissection['type'] = 'request'
                                 header['function_code'] = data[0]
@@ -84,6 +90,11 @@ class ModbusReceiver:
                                     'header': header,
                                     'body': dissection
                                 })
+                                self.logger.debug(
+                                    'MB:{} Header: {} Body:{}'.format(self.port, header, dissection))
+                                self.logger.debug(
+                                    'MB:{} Request: {}'.format(self.port, stringify_bytes(buffer + data)))
+                                self.logger.debug('MB:{} Responding: {}'.format(self.port, stringify_bytes(response)))
                                 self._current_connection.sendall(response)
                         except IOError as e:
                             self.logger.debug('An IO error occurred when reading the socket {}'.format(e))
@@ -107,20 +118,21 @@ class ModbusReceiver:
                     self.logger.debug('Message received from: {}'.format(address))
                     if buffer == b'' or len(buffer) <= 0:
                         self.logger.debug('Initial read was empty, peer connection was likely closed')
-                        break
+                        continue
                     header = buffer[:7]
                     header = modbusdecoder.dissect_header(header)
                     length = header['length']
                     if length == 0:
                         self.logger.debug('Length 0 message received')
-                        break
-                    data = buffer[7: 7 + length]
+                        continue
+                    data = buffer[7: 7 + length - 1]
                     is_error, dissection = self._dissect_packet(data)
                     if is_error:
                         self.logger.debug('An error was found in the modbus request {}'.format(dissection))
                         self.logger.debug('Header appears like: {}'.format(header))
-                        self._current_connection.sendall(dissection)
-                        break
+                        self.logger.debug('Buffer: {}'.format(stringify_bytes(buffer)))
+                        s.sendto(dissection, address)
+                        continue
                     else:
                         dissection['type'] = 'request'
                         header['function_code'] = data[0]
@@ -129,9 +141,9 @@ class ModbusReceiver:
                             'body': dissection
                         })
                         s.sendto(response, address)
-                        self.logger.debug('MB:{} Request: {}'.format(self.port, buffer[:7+length]))
+                        self.logger.debug('MB:{} Request: {}'.format(self.port, stringify_bytes(buffer[:7+length])))
                         self.logger.debug('MB:{} Header: {} Body:{}'.format(self.port, header, dissection))
-                        self.logger.debug('MB:{} Responding: {}'.format(self.port, response))
+                        self.logger.debug('MB:{} Responding: {}'.format(self.port, stringify_bytes(response)))
                 except IOError as e:
                     self.logger.warning('An IO error occurred with the socket {}'.format(e))
                     continue

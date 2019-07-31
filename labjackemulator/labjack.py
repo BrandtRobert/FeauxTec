@@ -104,15 +104,16 @@ class LabJack:
         return self.model.get_component(lookup_name)
 
     def _read_from_sensor(self, component) -> int:
+        comp_type = component.get_type()
         self.logger.debug('LJ:{} Attempting read from component type {}'.format(self.port, component.get_type()))
         if component.get_type() not in ['PressureTransducer', 'Thermocouple', 'FlowMeter']:
             raise Exception('Cannot read from non-sensor components')
         if component.get_type() == 'FlowMeter':
             self.model.calculate_flows('GSH-1') # add component attribute for it's parent gashouse
-        self.logger.debug('LJ:{} Component reading {}'.format(self.port, component.get_reading()))
+        self.logger.debug('LJ:{} {} reading {}'.format(self.port, comp_type, component.get_reading()))
         noised_reading = component.get_reading_voltage() + \
             (component.get_reading_voltage() * random.uniform(-self.noise_factor, self.noise_factor))
-        self.logger.debug('LJ:{} Component reading noised in volts {}'.format(self.port, noised_reading))
+        self.logger.info('LJ:{} {} reading noised in volts {}'.format(self.port, comp_type, noised_reading))
         return noised_reading
 
     def _write_to_component(self, component: ComponentBaseClass, value_to_set) -> ComponentBaseClass:
@@ -120,7 +121,7 @@ class LabJack:
         if component.get_type() == 'ElectricValve' or component.get_type() == 'ThreeWayElectricValve':
             value_to_set = 'open' if value_to_set == 0 else 'closed'
             self.model.set_valve(component.get_full_name(), value_to_set)
-            self.logger.debug('LJ:{} Write {} to component {}'.format(self.port, value_to_set, component))
+            self.logger.info('LJ:{} Write {} to component {}'.format(self.port, value_to_set, component))
         else:
             raise Exception('Cannot write to {} type components'.format(component.get_type()))
         return component
@@ -157,12 +158,13 @@ class LabJack:
             if component and 'ElectricValve' in component.get_type():
                 if component.get_reading() == 'open' or component.get_reading() == 'b':
                     bit_str = bit_str ^ 0x1 << idx
-        self.logger.debug('LJ:{} DIO state request returning {}'.format(self.port, bin(bit_str)))
+        self.logger.info('LJ:{} DIO state request returning {}'.format(self.port, bin(bit_str)))
         return encoder.respond_read_registers(request_header, [(bit_str, 'UINT32')], self.ENDIANNESS)
 
     def _read_write_register(self, register_address, write_value=None):
         # self.logger.debug('Request at address {}'.format(register_address))
         pin = self._registers_to_pins(register_address)
+        # EF_READ is used to read without setting the mode, just read from whatever virtual_pin corresponds
         if 'EF_READ_A' in pin and write_value is None:
             pin = pin.split('_')[0]
         component = self._get_component_from_pin(pin)

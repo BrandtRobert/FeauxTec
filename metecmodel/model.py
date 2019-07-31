@@ -100,7 +100,7 @@ class Model(ModelBaseClass):
                 value = 'b' if value == 'open' else 'a'
             if value != valve.get_reading():
                 valve.flip_valve()
-                self.logger.debug('Flipping valve {} now {}'.format(name, valve.get_reading()))
+                self.logger.info('Flipping valve {} now {}'.format(name, valve.get_reading()))
                 self.graph.redraw_edges(name, valve.get_neighbors())
             return valve.get_reading()
 

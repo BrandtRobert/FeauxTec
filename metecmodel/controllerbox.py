@@ -49,7 +49,7 @@ class ControllerBox:
         emissions = []
         for valve_states, file in valves_files:
             em = EmissionsTable('../Resources/Emissions/' + file).get_emissions(inlet_pressure, valve_states)
-            self.logger.info('Evaluating emissions (Controller Box: {}, Row {}) - {}'.format(self.name, i, em))
+            self.logger.debug('Evaluating emissions (Controller Box: {}, Row {}) - {}'.format(self.name, i, em))
             i = i + 1
             emissions.append(em)
         return emissions

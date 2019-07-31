@@ -24,9 +24,11 @@ class Logger:
         else:
             # Set up a specific logger with our desired output level
             logger = logging.getLogger(logger_name)
-            logger.setLevel(logging.DEBUG)
+            # logger.setLevel(logging.DEBUG)
+            logger.setLevel(logging.INFO)
             handler = logging.FileHandler(filename, mode='a')
-            handler.setLevel(logging.DEBUG)
+            # handler.setLevel(logging.DEBUG)
+            handler.setLevel(logging.INFO)
             # create formatter
             if prefix:
                 formatter = logging.Formatter("[%(levelname)s] {} %(asctime)s - %(message)s".format(prefix))

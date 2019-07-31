@@ -8,15 +8,15 @@ import socket
 if __name__ == '__main__':
 
     model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json', initial_pressure=50,
-                  initial_temperature=30)
+                  initial_temperature=75)
 
-    model.set_valve('GSH-1.EV-1', 'open')
-    model.set_valve('CB-1W.EV-11', 'open')
-    model.set_valve('CB-1W.EV-12', 'open')
-    model.set_valve('CB-1W.EV-13', 'open')
-    model.set_valve('CB-1S.EV-21', 'open')
-    model.set_valve('CB-1S.EV-22', 'open')
-    model.set_valve('CB-1S.EV-23', 'open')
+    # model.set_valve('GSH-1.EV-1', 'open')
+    # model.set_valve('CB-1W.EV-11', 'open')
+    # model.set_valve('CB-1W.EV-12', 'open')
+    # model.set_valve('CB-1W.EV-13', 'open')
+    # model.set_valve('CB-1S.EV-21', 'open')
+    # model.set_valve('CB-1S.EV-22', 'open')
+    # model.set_valve('CB-1S.EV-23', 'open')
 
     labjack_names_ports = {
         'GSH-1.LJ-1': 501,
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     for name, port in labjack_names_ports.items():
         labjack = LabJack(name, '../Resources/pins_to_registers.csv',
                           '../Resources/sensor_properties.csv', model, port, localhost=False,
-                          socket_type=socket.SOCK_STREAM, noise_factor=0.05)
+                          socket_type=socket.SOCK_DGRAM, noise_factor=0.01)
         lj_thread = LabJackThread(labjack)
         labjack_threads.append(lj_thread)
         lj_thread.start()
