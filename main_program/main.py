@@ -10,7 +10,7 @@ if __name__ == '__main__':
     model = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json', initial_pressure=50,
                   initial_temperature=75)
 
-    # model.set_valve('GSH-1.EV-1', 'open')
+    model.set_valve('GSH-1.EV-1', 'open')
     # model.set_valve('CB-1W.EV-11', 'open')
     # model.set_valve('CB-1W.EV-12', 'open')
     # model.set_valve('CB-1W.EV-13', 'open')

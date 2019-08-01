@@ -108,41 +108,43 @@ class Model(ModelBaseClass):
         return self.graph.are_connected(node_a, node_b)
 
     def calculate_flows(self, gashouse) -> Dict:
-        self.logger.debug('Requesting flows for {}'.format(gashouse))
-        if gashouse == 'GSH-1':
-            gsh_1_boxes = ['CB-1W', 'CB-2W', 'CB-1T', 'CB-2T', 'CB-1S', 'CB-2S']
-            gsh_1_flow_meters = ['FM-1', 'FM-2', 'FM-3', 'FM-4']
-            connected_meters = []
-            flow_dict = {}
-            total_emissions = 0
-            for box in gsh_1_boxes:
-                total_emissions = total_emissions + sum(self.get_controller_box_emissions(box))
-            total_emissions_in_slpm = total_emissions * 0.47
-            for meter in gsh_1_flow_meters:
-                meter_emissions = 0
-                if self.are_connected(gashouse + '.VOL-0', 'GSH-1.' + meter):
-                    if meter not in connected_meters:
-                        connected_meters.append(meter)
-                    for box in gsh_1_boxes:
-                        box_emissions = sum(self.get_controller_box_emissions(box))
-                        # The graph is softly directional so order does matter
-                        if self.are_connected(gashouse + '.' + meter, box + '.VOL-1'):
-                            meter_emissions = meter_emissions + box_emissions
-                meter_emissions_in_slpm = meter_emissions * 0.47
-                flow_dict['GSH-1.' + meter] = meter_emissions_in_slpm
-            for meter in connected_meters:
-                if flow_dict['GSH-1.' + meter] == total_emissions_in_slpm:
-                    flow = flow_dict['GSH-1.' + meter] / len(connected_meters)
-                else:
-                    flow = flow_dict['GSH-1.' + meter]
-                component = self.get_component('GSH-1.' + meter)
-                component.flow = flow
-                flow_dict['GSH-1.' + meter] = flow
-            self.logger.debug('Returning flows {}'.format(flow_dict))
-            self.logger.debug('Total Emissions {}'.format(total_emissions_in_slpm))
-            return flow_dict
-        else:
-            return {}
+        with self.lock:
+            self.logger.debug('Requesting flows for {}'.format(gashouse))
+            if gashouse == 'GSH-1':
+                gsh_1_boxes = ['CB-1W', 'CB-2W', 'CB-1T', 'CB-2T', 'CB-1S', 'CB-2S']
+                gsh_1_flow_meters = ['FM-1', 'FM-2', 'FM-3', 'FM-4']
+                connected_meters = []
+                flow_dict = {}
+                total_emissions = 0
+                for box in gsh_1_boxes:
+                    total_emissions = total_emissions + sum(self.get_controller_box_emissions(box))
+                total_emissions_in_slpm = total_emissions * 0.47
+                for meter in gsh_1_flow_meters:
+                    meter_emissions = 0
+                    if self.are_connected(gashouse + '.VOL-0', 'GSH-1.' + meter):
+                        if meter not in connected_meters:
+                            connected_meters.append(meter)
+                        for box in gsh_1_boxes:
+                            box_emissions = sum(self.get_controller_box_emissions(box))
+                            # The graph is softly directional so order does matter
+                            if self.are_connected(gashouse + '.' + meter, box + '.VOL-1'):
+                                meter_emissions = meter_emissions + box_emissions
+                    meter_emissions_in_slpm = meter_emissions * 0.47
+                    flow_dict['GSH-1.' + meter] = meter_emissions_in_slpm
+                for meter in connected_meters:
+                    if flow_dict['GSH-1.' + meter] == total_emissions_in_slpm:
+                        flow = flow_dict['GSH-1.' + meter] / len(connected_meters)
+                    else:
+                        flow = flow_dict['GSH-1.' + meter]
+                    flow_dict['GSH-1.' + meter] = flow
+                for meter in gsh_1_flow_meters:
+                    component = self.get_component('GSH-1.' + meter)
+                    component.flow = flow_dict['GSH-1.' + meter]
+                self.logger.debug('Returning flows {}'.format(flow_dict))
+                self.logger.debug('Total Emissions {}'.format(total_emissions_in_slpm))
+                return flow_dict
+            else:
+                return {}
 
     def change_model_pressure(self, new_pressure):
         self.initial_pressure = new_pressure

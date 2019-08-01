@@ -1,4 +1,7 @@
 import logging
+import time
+import pathlib
+import os
 
 
 class Logger:
@@ -26,7 +29,13 @@ class Logger:
             logger = logging.getLogger(logger_name)
             # logger.setLevel(logging.DEBUG)
             logger.setLevel(logging.INFO)
-            handler = logging.FileHandler(filename, mode='a')
+            timestr = time.strftime("%Y-%m-%d-%H:%M")
+            p = pathlib.PurePath(filename)
+            parent = p.parent
+            name = p.name
+            path = parent.joinpath(timestr).joinpath(name)
+            os.makedirs(path.parent, exist_ok=True)
+            handler = logging.FileHandler(str(path), mode='a')
             # handler.setLevel(logging.DEBUG)
             handler.setLevel(logging.INFO)
             # create formatter

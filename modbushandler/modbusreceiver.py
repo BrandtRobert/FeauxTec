@@ -97,7 +97,7 @@ class ModbusReceiver:
                                 self.logger.debug('MB:{} Responding: {}'.format(self.port, stringify_bytes(response)))
                                 self._current_connection.sendall(response)
                         except IOError as e:
-                            self.logger.debug('An IO error occurred when reading the socket {}'.format(e))
+                            self.logger.warning('An IO error occurred when reading the socket {}'.format(e))
                             self.logger.debug('Closing connection')
                             self._current_connection.close()
                             break
@@ -115,7 +115,7 @@ class ModbusReceiver:
             while not self.stop.is_set():
                 try:
                     buffer, address = s.recvfrom(256)
-                    self.logger.debug('Message received from: {}'.format(address))
+                    self.logger.info('Message received from: {}'.format(address))
                     if buffer == b'' or len(buffer) <= 0:
                         self.logger.debug('Initial read was empty, peer connection was likely closed')
                         continue
