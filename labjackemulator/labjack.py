@@ -103,14 +103,14 @@ class LabJack:
         lookup_name = sensor['name'][0]
         return self.model.get_component(lookup_name)
 
-    def _read_from_sensor(self, component) -> int:
+    def _read_from_sensor(self, component: ComponentBaseClass) -> int:
         comp_type = component.get_type()
         self.logger.debug('LJ:{} Attempting read from component type {}'.format(self.port, component.get_type()))
         if component.get_type() not in ['PressureTransducer', 'Thermocouple', 'FlowMeter']:
             raise Exception('Cannot read from non-sensor components')
         if component.get_type() == 'FlowMeter':
             self.logger.debug('Calculating flows and setting meters')
-            self.model.calculate_flows('GSH-1') # add component attribute for it's parent gashouse
+            self.model.calculate_flows(component.get_prefix()) # add component attribute for it's parent gashouse
         self.logger.debug('LJ:{} {} reading {}'.format(self.port, comp_type, component.get_reading()))
         noised_reading = component.get_reading_voltage() + \
             (component.get_reading_voltage() * random.uniform(-self.noise_factor, self.noise_factor))
