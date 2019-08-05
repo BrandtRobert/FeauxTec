@@ -44,9 +44,13 @@ gashouses:
   GSH-2_FM:
     - 'FM-1'
     - 'FM-2'
+initial_temperatures:
+  GSH-1: 75
+  GSH-2: 75
+initial_pressures:
+  GSH-1: 50
+  GSH-2: 100
 # model specific config parameters
 localhost: false
 socket_type: UDP
 noise_factor: 0.01
-initial_temperature: 65
-initial_pressure: 40

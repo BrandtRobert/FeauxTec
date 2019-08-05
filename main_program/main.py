@@ -21,7 +21,7 @@ def load_config_file(filename):
 if __name__ == '__main__':
     config = load_config_file('../Resources/config/model_config.yaml')
     model = Model(config['sensor_properties'], config['volumes_files'], config['gashouses'],
-                  initial_pressure=config['initial_pressure'], initial_temperature=config['initial_temperature'])
+                  initial_pressure=config['initial_pressures'], initial_temperature=config['initial_temperatures'])
 
     for valve, state in config['valve_states'].items():
         model.set_valve(valve, state)
@@ -62,7 +62,7 @@ if __name__ == '__main__':
                     exit()
                 if char == 'C':
                     first_component = input('Input the name of the first component: ')
-                    second_component = input('Input the name of the first component: ')
+                    second_component = input('Input the name of the second component: ')
                     print(model.are_connected(first_component, second_component))
                 if char == 'N':
                     component = input('Input component name: ')
@@ -77,11 +77,13 @@ if __name__ == '__main__':
                     for k, v in flows.items():
                         print('Meter: {}, Flow: {:.4f} - slpm'.format(k, v))
                 if char == 'P':
+                    gashouse = input('Enter the gas house name: ').upper()
                     pressure = float(input('Enter new model pressure: '))
-                    model.change_model_pressure(pressure)
+                    model.change_model_pressure(pressure, gashouse)
                 if char == 'T':
+                    gashouse = input('Enter the gas house name: ').upper()
                     temp = float(input('Enter new temperature: '))
-                    model.change_model_temperature(temp)
+                    model.change_model_temperature(temp, gashouse)
                 if char == 'V':
                     valve_name = input('Enter the valve name: ')
                     state = input("'open' or 'close': ")

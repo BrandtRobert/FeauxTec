@@ -245,6 +245,7 @@ class LabJack:
                 return decoder.invalid_function_code([request_header['function_code']])[1]
         except Exception as e:
             print('Exception occurred:\n{}'.format(e))
+            raise e
             # error responses possible?
             # return decoder.invalid_function_code([request_header['function_code']])[1]
 

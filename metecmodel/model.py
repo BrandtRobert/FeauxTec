@@ -19,6 +19,15 @@ class Model(ModelBaseClass):
         self.logger = Logger('ModelLogger-1', '../logger/logs/model_log.txt')
         self._init_model(sensor_properties, volumes_files)
 
+    def _get_gashouse(self, name):
+        prefix = name.split('.')[0]
+        if 'GSH' in prefix:
+            return prefix
+        for gashouse in self.gashouse_boxes.keys():
+            if prefix in self.gashouse_boxes[gashouse]:
+                return gashouse
+        return prefix
+
     def _create_component(self, name, info, neighbors) -> ComponentBaseClass:
         if info['item_type'] == 'Electric Valve':
             if 'a' in neighbors:
@@ -26,9 +35,11 @@ class Model(ModelBaseClass):
             else:
                 component = ElectricValve(name, neighbors, info)
         elif info['item_type'] == 'Pressure Transducer':
-            component = PressureTransducer(name, neighbors, info, initial_pressure=self.initial_pressure)
+            pressure = self.get_gas_house_pressure(name)
+            component = PressureTransducer(name, neighbors, info, initial_pressure=pressure)
         elif info['item_type'] == 'Thermocouple':
-            component = Thermocouple(name, neighbors, info, initial_temp=self.initial_temperature)
+            temperature = self.get_gas_house_temperature(name)
+            component = Thermocouple(name, neighbors, info, initial_temp=temperature)
         elif info['item_type'] == 'Flow Meter':
             component = FlowMeter(name, neighbors, info, initial_flow=self.initial_flow)
         elif info['item_type'] == 'Manual Valve':
@@ -90,7 +101,7 @@ class Model(ModelBaseClass):
             self.logger.debug('Request for emissions on controller box {}'.format(cb_name))
             if cb_name in self.controller_boxes:
                 cb: ControllerBox = self.controller_boxes[cb_name]
-                return cb.get_emissions(self.initial_pressure)
+                return cb.get_emissions(self.get_gas_house_pressure(cb_name))
             else:
                 raise KeyError('{} not in model'.format(cb_name))
 
@@ -148,19 +159,37 @@ class Model(ModelBaseClass):
             self.logger.debug('Total Emissions {}'.format(total_emissions_in_slpm))
             return flow_dict
 
-    def change_model_pressure(self, new_pressure):
+    def change_model_pressure(self, new_pressure, gashouse):
         self.initial_pressure = new_pressure
         for name, cb in self.controller_boxes.items():
-            for _, component in cb.components.items():
-                if component.get_type() is 'PressureTransducer':
-                    component.pressure = new_pressure
+            if self._get_gashouse(name) == gashouse:
+                for _, component in cb.components.items():
+                    if component.get_type() is 'PressureTransducer':
+                        component.pressure = new_pressure
 
-    def change_model_temperature(self, new_temp):
+    def change_model_temperature(self, new_temp, gashouse):
         self.initial_temperature = new_temp
         for name, cb in self.controller_boxes.items():
-            for _, component in cb.components.items():
-                if component.get_type() is 'Thermocouple':
-                    component.temperature = new_temp
+            if self._get_gashouse(name) == gashouse:
+                for _, component in cb.components.items():
+                    if component.get_type() is 'Thermocouple':
+                        component.temperature = new_temp
+
+    def get_gas_house_pressure(self, name):
+        pressure = self.initial_pressure
+        if type(self.initial_pressure) == dict:
+            gashouse = self._get_gashouse(name)
+            return self.initial_pressure.get(gashouse, 0)
+        else:
+            return pressure
+
+    def get_gas_house_temperature(self, name):
+        pressure = self.initial_temperature
+        if type(self.initial_temperature) == dict:
+            gashouse = self._get_gashouse(name)
+            return self.initial_temperature.get(gashouse, 0)
+        else:
+            return pressure
 
 
 if __name__ == '__main__':
