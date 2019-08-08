@@ -51,6 +51,7 @@ if __name__ == '__main__':
                              'T to set model temperature (F)\n'
                              'V to set a valve state\n'
                              'S to get statistics\n'
+                             'G write the current graph to a file\n'
                              'Q to quit\n')
                 char = char.upper()
                 if char == 'E':
@@ -95,6 +96,10 @@ if __name__ == '__main__':
                     print('Valve now:', model.set_valve(valve_name, state))
                 if char == 'S':
                     print(StatisticsCollector.get_stats())
+                if char == 'G':
+                    print('Saving graph...')
+                    model.graph.save_graph(Logger.get_dir() + '/graph_' + time.strftime("%Y-%m-%d-%H:%M") + '.gml')
+                    print('Graph saved')
             except Exception as e:
                 print(e)
     except KeyboardInterrupt:
