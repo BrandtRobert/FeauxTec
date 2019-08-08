@@ -7,6 +7,7 @@ import os
 class Logger:
 
     active_loggers = {}
+    level = logging.INFO
 
     def __init__(self, logger_name, filename, prefix=None):
         self.prefix = prefix + ' ' if prefix is not None else ''
@@ -28,7 +29,7 @@ class Logger:
             # Set up a specific logger with our desired output level
             logger = logging.getLogger(logger_name)
             # logger.setLevel(logging.DEBUG)
-            logger.setLevel(logging.INFO)
+            logger.setLevel(Logger.level)
             timestr = time.strftime("%Y-%m-%d-%H:%M")
             p = pathlib.PurePath(filename)
             parent = p.parent
@@ -37,7 +38,7 @@ class Logger:
             os.makedirs(path.parent, exist_ok=True)
             handler = logging.FileHandler(str(path), mode='a')
             # handler.setLevel(logging.DEBUG)
-            handler.setLevel(logging.INFO)
+            handler.setLevel(Logger.level)
             # create formatter
             if prefix:
                 formatter = logging.Formatter("[%(levelname)s] {} %(asctime)s - %(message)s".format(prefix))

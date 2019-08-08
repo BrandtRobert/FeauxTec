@@ -1,6 +1,5 @@
 from typing import Dict
 from interfaces import ParserBaseClass
-from interfaces import ComponentBaseClass
 import csv
 
 
