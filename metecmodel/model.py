@@ -17,7 +17,9 @@ class Model(ModelBaseClass):
         self.gashouse_boxes = gashouse_boxes
         self.lock = threading.RLock()
         self.logger = Logger('ModelLogger-1', '../logger/logs/model_log.txt')
+        print('Initializing model...')
         self._init_model(sensor_properties, volumes_files)
+        print('Model constructed')
 
     def _get_gashouse(self, name):
         prefix = name.split('.')[0]
@@ -72,6 +74,7 @@ class Model(ModelBaseClass):
                 self.graph.add_node(item, current_neighbors)
 
     def _init_model(self, sensor_properties_file, volumes_files):
+        print('Loading configuration files...')
         csv_rows: Dict[ComponentBaseClass] = SensorPropertiesParser(sensor_properties_file).parse()
         items_to_dict: Dict = ParseMultipleVolumes(volumes_files).parse()
         controller_boxes = {}
