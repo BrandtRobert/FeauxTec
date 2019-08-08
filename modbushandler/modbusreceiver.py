@@ -1,4 +1,5 @@
 import socket
+import time
 from typing import Callable
 from modbushandler import modbusdecoder
 import threading
@@ -6,6 +7,7 @@ from typing import Dict
 from logger import Logger
 from time import sleep
 from modbushandler.util import stringify_bytes
+from metecmodel import StatisticsCollector
 
 
 class ModbusReceiver:
@@ -74,6 +76,8 @@ class ModbusReceiver:
                                 self.logger.debug('A length 0 header was read, closing connection')
                                 break
                             data = self._current_connection.recv(length-1)
+                            StatisticsCollector.increment_packets_received()
+                            response_start = time.time()
                             is_error, dissection = self._dissect_packet(data)
                             if is_error:
                                 self.logger.debug('MB:{} Header appears like: {}'.format(self.port, header))
@@ -82,6 +86,10 @@ class ModbusReceiver:
                                 self.logger.debug(
                                     'MB:{} An error was found in the modbus request {}'.format(self.port, stringify_bytes(dissection)))
                                 self._current_connection.sendall(dissection)
+                                response_stop = time.time()
+                                StatisticsCollector.increment_error_packets_sent()
+                                StatisticsCollector.increment_responses_sent()
+                                StatisticsCollector.increment_avg_response(response_stop - response_start)
                                 continue
                             else:
                                 dissection['type'] = 'request'
@@ -96,10 +104,14 @@ class ModbusReceiver:
                                     'MB:{} Request: {}'.format(self.port, stringify_bytes(buffer + data)))
                                 self.logger.debug('MB:{} Responding: {}'.format(self.port, stringify_bytes(response)))
                                 self._current_connection.sendall(response)
+                                response_stop = time.time()
+                                StatisticsCollector.increment_responses_sent()
+                                StatisticsCollector.increment_avg_response(response_stop - response_start)
                         except IOError as e:
                             self.logger.warning('An IO error occurred when reading the socket {}'.format(e))
                             self.logger.debug('Closing connection')
                             self._current_connection.close()
+                            StatisticsCollector.increment_socket_errors()
                             break
             self.done.set()
 
@@ -116,6 +128,8 @@ class ModbusReceiver:
                 try:
                     buffer, address = s.recvfrom(256)
                     self.logger.info('Message received from: {}'.format(address))
+                    StatisticsCollector.increment_packets_received()
+                    response_start = time.time()
                     if buffer == b'' or len(buffer) <= 0:
                         self.logger.debug('Initial read was empty, peer connection was likely closed')
                         continue
@@ -132,6 +146,10 @@ class ModbusReceiver:
                         self.logger.debug('Header appears like: {}'.format(header))
                         self.logger.debug('Buffer: {}'.format(stringify_bytes(buffer)))
                         s.sendto(dissection, address)
+                        response_stop = time.time()
+                        StatisticsCollector.increment_avg_response(response_stop - response_start)
+                        StatisticsCollector.increment_error_packets_sent()
+                        StatisticsCollector.increment_responses_sent()
                         continue
                     else:
                         dissection['type'] = 'request'
@@ -141,11 +159,15 @@ class ModbusReceiver:
                             'body': dissection
                         })
                         s.sendto(response, address)
+                        response_stop = time.time()
+                        StatisticsCollector.increment_avg_response(response_stop - response_start)
+                        StatisticsCollector.increment_responses_sent()
                         self.logger.debug('MB:{} Request: {}'.format(self.port, stringify_bytes(buffer[:7+length])))
                         self.logger.debug('MB:{} Header: {} Body:{}'.format(self.port, header, dissection))
                         self.logger.debug('MB:{} Responding: {}'.format(self.port, stringify_bytes(response)))
                 except IOError as e:
                     self.logger.warning('An IO error occurred with the socket {}'.format(e))
+                    StatisticsCollector.increment_socket_errors()
                     continue
         self.done.set()
     '''
@@ -188,7 +210,6 @@ class ModbusReceiver:
 
 if __name__ == '__main__':
     m = ModbusReceiver(8080, socket_type=socket.SOCK_DGRAM)
-
     def handler(msg):
         print(msg)
         return b'received'

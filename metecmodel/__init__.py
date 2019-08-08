@@ -4,3 +4,4 @@ from .volumesparser import VolumesParser
 from .parsemultiplevolumes import ParseMultipleVolumes
 from .emissionstable import EmissionsTable
 from .model import Model
+from .statisticscollector import StatisticsCollector
