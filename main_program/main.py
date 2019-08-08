@@ -1,10 +1,12 @@
 import sys
-sys.path.insert(0, '/var/root/PycharmProjects/metec_model')
-from metecmodel import Model
-from labjackemulator import LabJack
-from main_program.labjackthread import LabJackThread
 import socket
 import yaml
+import time
+sys.path.insert(0, '/var/root/PycharmProjects/metec_model')
+from metecmodel import Model, StatisticsCollector
+from labjackemulator import LabJack
+from main_program.labjackthread import LabJackThread
+from logger import Logger
 
 
 def load_config_file(filename):
@@ -48,6 +50,7 @@ if __name__ == '__main__':
                              'P to set model pressure (psi)\n'
                              'T to set model temperature (F)\n'
                              'V to set a valve state\n'
+                             'S to get statistics\n'
                              'Q to quit\n')
                 char = char.upper()
                 if char == 'E':
@@ -56,6 +59,8 @@ if __name__ == '__main__':
                     for i in range(0, 3):
                         print('Row {}, {} - scfh'.format(i, emissions[i]))
                 if char == 'Q':
+                    StatisticsCollector.write_out_stats(Logger.get_dir()
+                                                        + '/stats_' + time.strftime("%Y-%m-%d-%H:%M") + '.json')
                     print('Exiting...')
                     for lj_thread in labjack_threads:
                         lj_thread.stop()
@@ -88,10 +93,14 @@ if __name__ == '__main__':
                     valve_name = input('Enter the valve name: ')
                     state = input("'open' or 'close': ")
                     print('Valve now:', model.set_valve(valve_name, state))
+                if char == 'S':
+                    print(StatisticsCollector.get_stats())
             except Exception as e:
                 print(e)
     except KeyboardInterrupt:
         print('Execution interrupted, exiting now...')
+        StatisticsCollector.write_out_stats(Logger.get_dir()
+                                            + '/stats_' + time.strftime("%Y-%m-%d-%H:%M") + '.json')
         for lj_thread in labjack_threads:
             lj_thread.stop()
         exit()

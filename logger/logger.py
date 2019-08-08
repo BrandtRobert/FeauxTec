@@ -8,6 +8,7 @@ class Logger:
 
     active_loggers = {}
     level = logging.INFO
+    logger_dir = '.'
 
     def __init__(self, logger_name, filename, prefix=None):
         self.prefix = prefix + ' ' if prefix is not None else ''
@@ -21,6 +22,10 @@ class Logger:
 
     def warning(self, msg):
         self.logger.warning(self.prefix + msg)
+
+    @staticmethod
+    def get_dir():
+        return str(Logger.logger_dir)
 
     def set_up_logger(self, logger_name, filename, prefix=None):
         if logger_name in self.active_loggers:
@@ -36,6 +41,7 @@ class Logger:
             name = p.name
             path = parent.joinpath(timestr).joinpath(name)
             os.makedirs(path.parent, exist_ok=True)
+            Logger.logger_dir = path.parent
             handler = logging.FileHandler(str(path), mode='a')
             # handler.setLevel(logging.DEBUG)
             handler.setLevel(Logger.level)

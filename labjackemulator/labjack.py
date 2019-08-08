@@ -2,12 +2,13 @@ import pandas as pd
 from modbushandler import ModbusReceiver
 import modbushandler.modbusencoder as encoder
 import modbushandler.modbusdecoder as decoder
-from metecmodel import Model
+from metecmodel import Model, StatisticsCollector
 from interfaces import ComponentBaseClass
 import re
 import socket
 from logger import Logger
 import random
+
 
 class LabJack:
 
@@ -31,6 +32,7 @@ class LabJack:
         self.port = port
         self.logger.info('Labjack created at port {}'.format(port))
         self.noise_factor = noise_factor
+        StatisticsCollector.increment_number_of_devices()
 
     @staticmethod
     def _DIO_to_ALT(dio_name) -> str:
