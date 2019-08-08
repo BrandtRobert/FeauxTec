@@ -49,7 +49,7 @@ initial_temperatures:
   GSH-2: 75
 initial_pressures:
   GSH-1: 50
-  GSH-2: 100
+  GSH-2: 40
 # model specific config parameters
 localhost: false
 socket_type: UDP
