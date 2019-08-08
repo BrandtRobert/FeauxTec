@@ -14,5 +14,8 @@ class FlowMeter(ComponentBaseClass, GraphNode):
         data['max'] = data.get('max', 0)
 
     def get_reading(self) -> float:
-        return self.flow
+        if self.flow == 0:
+            return 0.001
+        else:
+            return self.flow
 
