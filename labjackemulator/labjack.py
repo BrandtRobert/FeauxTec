@@ -18,7 +18,7 @@ class LabJack:
     ENDIANNESS = 'BIG'
 
     def __init__(self, name, pins_to_registers_file, sensor_properties_file, physical_model, port,
-                 localhost=True, socket_type=socket.SOCK_STREAM, noise_factor=0):
+                 localhost=True, socket_type=socket.SOCK_STREAM, noise_factor=0, failures={}):
         self.pins = pd.read_csv(pins_to_registers_file).set_index('start_address')
         self.pins['data'] = 0
         self.pins.loc['pin' == 'HARDWARE_VERSION', 'data'] = 1.35
@@ -26,8 +26,9 @@ class LabJack:
         self.sensors = pd.read_csv(sensor_properties_file).set_index('reader').loc[name]
         self.name = name
         self.model = physical_model
+        self.failures = failures
         self.receiver = ModbusReceiver(port, localhost=localhost, device_function_codes=self.DEVICE_FUNCTION_CODES,
-                                       socket_type=socket_type)
+                                       socket_type=socket_type, failures=self.failures)
         self.logger = Logger('LabjackLogger-{}'.format(port), '../logger/logs/labjack_log.txt')
         self.port = port
         self.logger.info('Labjack created at port {}'.format(port))
@@ -261,6 +262,11 @@ class LabJack:
     def stop_server(self):
         self.receiver.stop_server()
 
+    def inject_failures(self, failures):
+        self.receiver.set_failures(failures)
+
+    def __str__(self):
+        return self.name
 
 if __name__ == "__main__":
     m = Model('../Resources/sensor_properties.csv', '../Resources/GSH-1-volumes.json')

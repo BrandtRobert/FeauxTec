@@ -28,13 +28,17 @@ if __name__ == '__main__':
     for valve, state in config['valve_states'].items():
         model.set_valve(valve, state)
 
-    labjack_names_ports = config['Labjacks']
+    labjack_names_data = config['Labjacks']
     socket_type = socket.SOCK_STREAM if config['socket_type'] == 'TCP' else socket.SOCK_DGRAM
     labjack_threads = []
-
-    for name, port in labjack_names_ports.items():
+    labjacks = {}
+    for name, data in labjack_names_data.items():
+        port = data['port']
+        failures = data.get('failures', {})
         labjack = LabJack(name, config['pins_to_registers'], config['sensor_properties'], model, port,
-                          localhost=config['localhost'], socket_type=socket_type, noise_factor=config['noise_factor'])
+                          localhost=config['localhost'], socket_type=socket_type, noise_factor=config['noise_factor'],
+                          failures=failures)
+        labjacks[name] = labjack
         lj_thread = LabJackThread(labjack)
         labjack_threads.append(lj_thread)
         lj_thread.start()
@@ -52,6 +56,7 @@ if __name__ == '__main__':
                              'V to set a valve state\n'
                              'S to get statistics\n'
                              'G write the current graph to a file\n'
+                             'D to set some failures\n'
                              'Q to quit\n')
                 char = char.upper()
                 if char == 'E':
@@ -100,6 +105,36 @@ if __name__ == '__main__':
                     print('Saving graph...')
                     model.graph.save_graph(Logger.get_dir() + '/graph_' + time.strftime("%Y-%m-%d-%H:%M") + '.gml')
                     print('Graph saved')
+                if char == 'D':
+                    labjack_to_fail = input('Input the full name of the labjack to kill (ex: CB-1W.LJ-1): ').upper()
+                    labjack_to_fail = labjacks.get(labjack_to_fail, False)
+                    if not labjack_to_fail:
+                        print('Not a valid labjack')
+                        continue
+                    type_of_failure = \
+                        input('Type of failure? delay = D, stop-responding = S, '
+                              'flaky = F, R = reset K = kill: ').upper()[0]
+                    if type_of_failure == 'D':
+                        print('Delaying {}'.format(labjack_to_fail))
+                        delay = int(input('Input upper bound of delay (in whole # of ms): '))
+                        labjack_to_fail.inject_failures({'delay-response': delay})
+                    elif type_of_failure == 'S':
+                        print('Stopping responses for {}'.format(labjack_to_fail))
+                        labjack_to_fail.inject_failures({'stop-responding': True})
+                    elif type_of_failure == 'F':
+                        print('Delaying {}'.format(labjack_to_fail))
+                        delay = int(input('Input upper bound of delay (in whole # of ms): '))
+                        labjack_to_fail.inject_failures({'flake-response': delay})
+                    elif type_of_failure == 'R':
+                        print('Resetting {}'.format(labjack_to_fail))
+                        labjack_to_fail.inject_failures({
+                            'delay-response': False,
+                            'stop-responding': False,
+                            'flake-response': False
+                        })
+                    elif type_of_failure == 'K':
+                        print('Killing {}'.format(labjack_to_fail))
+                        labjack_to_fail.stop_server()
             except Exception as e:
                 print(e)
     except KeyboardInterrupt:

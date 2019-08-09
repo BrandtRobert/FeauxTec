@@ -1,5 +1,6 @@
 import socket
 import time
+import random
 from typing import Callable
 from modbushandler import modbusdecoder
 import threading
@@ -12,7 +13,7 @@ from metecmodel import StatisticsCollector
 
 class ModbusReceiver:
 
-    def __init__(self, port, localhost=True, device_function_codes=None, socket_type=socket.SOCK_STREAM):
+    def __init__(self, port, localhost=True, device_function_codes=None, socket_type=socket.SOCK_STREAM, failures={}):
         self.port = port
         self.localhost = localhost
         self.stop = threading.Event()
@@ -21,6 +22,8 @@ class ModbusReceiver:
         self.logger = Logger('ServerLogger-{}'.format(port), '../logger/logs/server_log.txt', prefix='Server {}'.format(port))
         self._current_connection = None
         self.socket_type = socket_type
+        self.failures = failures
+        self.lock = threading.RLock()
 
     '''
         Dispatches packet data for decoding based on it's function code.
@@ -103,6 +106,9 @@ class ModbusReceiver:
                                 self.logger.debug(
                                     'MB:{} Request: {}'.format(self.port, stringify_bytes(buffer + data)))
                                 self.logger.debug('MB:{} Responding: {}'.format(self.port, stringify_bytes(response)))
+                                # add failures to the receiver
+                                if not self.simulate_failures():
+                                    continue
                                 self._current_connection.sendall(response)
                                 response_stop = time.time()
                                 StatisticsCollector.increment_responses_sent()
@@ -127,7 +133,7 @@ class ModbusReceiver:
             while not self.stop.is_set():
                 try:
                     buffer, address = s.recvfrom(256)
-                    self.logger.info('Message received from: {}'.format(address))
+                    self.logger.debug('Message received from: {}'.format(address))
                     StatisticsCollector.increment_packets_received()
                     response_start = time.time()
                     if buffer == b'' or len(buffer) <= 0:
@@ -158,6 +164,9 @@ class ModbusReceiver:
                             'header': header,
                             'body': dissection
                         })
+                        # add failures to the receiver
+                        if not self.simulate_failures():
+                            continue
                         s.sendto(response, address)
                         response_stop = time.time()
                         StatisticsCollector.increment_avg_response(response_stop - response_start)
@@ -170,6 +179,34 @@ class ModbusReceiver:
                     StatisticsCollector.increment_socket_errors()
                     continue
         self.done.set()
+
+    # Return False to not respond
+    def simulate_failures(self):
+        with self.lock:
+            if self.failures.get('stop-responding', False):
+                self.logger.info('MB:{} Simulating no-response'.format(self.port))
+                return False
+            elif self.failures.get('flake-response'):
+                val = random.choice([1, 2, 3])
+                if val == 1:
+                    upper_bound = self.failures['flake-response']
+                    sleep_time = random.randint(0, upper_bound) * 0.01
+                    self.logger.info('MB:{} Simulating flake-response "delayed" {}ms'.format(self.port, sleep_time))
+                    time.sleep(sleep_time)
+                elif val == 2:
+                    self.logger.info('MB:{} Simulating flake-response "no-response"'.format(self.port))
+                    return False
+            elif self.failures.get('delay-response', False):
+                upper_bound = self.failures['delay-response']
+                sleep_time = random.randint(0, upper_bound) * 0.01
+                self.logger.info('MB:{} Simulating delay-response {}ms'.format(self.port, sleep_time))
+                time.sleep(sleep_time)
+            return True
+
+    def set_failures(self, failures):
+        with self.lock:
+            self.failures = failures
+
     '''
         Starts the Modbus server and listens for packets over a TCP/IP connection. By default it will bind to
         localhost at a port specified in the constructor. Upon receiving a modbus message it will decode the header

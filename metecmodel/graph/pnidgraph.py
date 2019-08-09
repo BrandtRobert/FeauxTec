@@ -16,7 +16,7 @@ class PNIDGraph:
         elif 'VOL' not in node_name:
             for n in neighbors:
                 self.graph.add_edge(node_name, n)
-                # self.graph.add_edge(n, node_name)
+                self.graph.add_edge(n, node_name)
 
     def are_connected(self, a, b):
         try:
@@ -33,5 +33,4 @@ class PNIDGraph:
             self.graph.add_edge(n, node_name)
 
     def save_graph(self, graph_file):
-        # nx.write_graphml(self.graph, graph_file)
         nx.write_gml(self.graph, graph_file)

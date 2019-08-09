@@ -6,16 +6,30 @@ volumes_files:
   - '/var/root/PycharmProjects/metec_model/Resources/GSH-1-volumes.json'
   - '/var/root/PycharmProjects/metec_model/Resources/GSH-2-fake-volumes.json'
 Labjacks:
-  GSH-1.LJ-1: 501
-  CB-1W.LJ-1: 502
-  CB-1T.LJ-1: 503
-  CB-1S.LJ-1: 504
-  CB-2W.LJ-1: 505
-  CB-2T.LJ-1: 506
-  CB-2S.LJ-1: 507
-  GSH-2.LJ-1: 508
-  CB-3W.LJ-1: 509
-  CB-3S.LJ-1: 510
+  GSH-1.LJ-1:
+    port: 501
+  CB-1W.LJ-1:
+    port: 502
+  CB-1T.LJ-1:
+    port: 503
+  CB-1S.LJ-1:
+    port: 504
+  CB-2W.LJ-1:
+    port: 505
+    failures:
+      stop-responding: false
+      flake-response: false
+      delay-response: false
+  CB-2T.LJ-1:
+    port: 506
+  CB-2S.LJ-1:
+    port: 507
+  GSH-2.LJ-1:
+    port: 508
+  CB-3W.LJ-1:
+    port: 509
+  CB-3S.LJ-1:
+    port: 510
 valve_states:
   GSH-1.EV-1: open
   GSH-2.EV-1: open
