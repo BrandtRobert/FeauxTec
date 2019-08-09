@@ -39,6 +39,15 @@ valve_states:
   CB-3W.EV-13: open
   CB-3W.EV-21: open
   CB-3W.EV-23: open
+component_failures:
+  CB-1W.EV-11:
+    default: 0.3
+  CB-1W.TC-1:
+    random: 0.6
+  CB-1W.PT-1:
+    dead: 1.0
+  CB-1S.TC-1:
+    NaN: 0.5
 gashouses:
   GSH-1:
     - 'CB-1W'

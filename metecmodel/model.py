@@ -10,10 +10,11 @@ import threading
 class Model(ModelBaseClass):
 
     def __init__(self, sensor_properties: str, volumes_files: List[str], gashouse_boxes: Dict,
-                 initial_pressure=20, initial_temperature=75, initial_flow=15):
+                 initial_pressure=20, initial_temperature=75, initial_flow=15, failures={}):
         self.initial_pressure = initial_pressure
         self.initial_temperature = initial_temperature
         self.initial_flow = initial_flow
+        self.failures = failures
         self.gashouse_boxes = gashouse_boxes
         self.lock = threading.RLock()
         self.logger = Logger('ModelLogger-1', '../logger/logs/model_log.txt')
@@ -30,20 +31,41 @@ class Model(ModelBaseClass):
                 return gashouse
         return prefix
 
+    def _get_failures(self, name):
+        failure_rate = 0
+        failure_type = None
+        if name in self.failures:
+            if 'random' in self.failures[name]:
+                failure_type = 'random'
+                failure_rate = self.failures[name][failure_type]
+            elif 'dead' in self.failures[name]:
+                failure_type = 'dead'
+                failure_rate = self.failures[name][failure_type]
+            elif 'default' in self.failures:
+                failure_rate = self.failures[name]['default']
+            elif 'NaN' in self.failures[name]:
+                failure_type = 'NaN'
+                failure_rate = self.failures[name][failure_type]
+        return failure_rate, failure_type
+
     def _create_component(self, name, info, neighbors) -> ComponentBaseClass:
+        failure_rate, failure_type = self._get_failures(name)
         if info['item_type'] == 'Electric Valve':
             if 'a' in neighbors:
                 component = ThreeWayElectricValve(name, neighbors, info)
             else:
-                component = ElectricValve(name, neighbors, info)
+                component = ElectricValve(name, neighbors, info, failure_rate=failure_rate)
         elif info['item_type'] == 'Pressure Transducer':
             pressure = self.get_gas_house_pressure(name)
-            component = PressureTransducer(name, neighbors, info, initial_pressure=pressure)
+            component = PressureTransducer(name, neighbors, info, initial_pressure=pressure,
+                                           failure_rate=failure_rate, failure_type=failure_type)
         elif info['item_type'] == 'Thermocouple':
             temperature = self.get_gas_house_temperature(name)
-            component = Thermocouple(name, neighbors, info, initial_temp=temperature)
+            component = Thermocouple(name, neighbors, info, initial_temp=temperature,
+                                     failure_rate=failure_rate, failure_type=failure_type)
         elif info['item_type'] == 'Flow Meter':
-            component = FlowMeter(name, neighbors, info, initial_flow=self.initial_flow)
+            component = FlowMeter(name, neighbors, info, initial_flow=self.initial_flow,
+                                  failure_rate=failure_rate, failure_type=failure_type)
         elif info['item_type'] == 'Manual Valve':
             if 'a' in neighbors:
                 component = ManualValve(name, neighbors, info, initial_state='a')
