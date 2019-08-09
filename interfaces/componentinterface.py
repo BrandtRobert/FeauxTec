@@ -1,5 +1,6 @@
 import abc
 from typing import Dict
+import random
 
 
 class ComponentBaseClass(abc.ABC):
@@ -23,6 +24,13 @@ class ComponentBaseClass(abc.ABC):
 
     def get_reading_voltage(self):
         return self.get_reading()
+
+    def is_simulated_failure(self, fail_rate):
+        val = random.uniform(0, 1)
+        if val < fail_rate:
+            return True
+        else:
+            return False
 
     def __repr__(self) -> str:
         str(self)
