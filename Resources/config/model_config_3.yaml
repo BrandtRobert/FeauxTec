@@ -1,0 +1,54 @@
+---
+# Initial model setup
+sensor_properties: '/var/root/PycharmProjects/metec_model/Resources/sensor_properties_test.csv'
+pins_to_registers: '/var/root/PycharmProjects/metec_model/Resources/pins_to_registers.csv'
+volumes_files:
+  - '/var/root/PycharmProjects/metec_model/Resources/GSH-1-volumes.json'
+Labjacks:
+  # GSH-1
+  GSH-1.LJ-1:
+    port: 501
+  CB-1W.LJ-1:
+    port: 502
+  CB-1T.LJ-1:
+    port: 503
+  CB-1S.LJ-1:
+    port: 504
+  CB-2W.LJ-1:
+    port: 505
+  CB-2T.LJ-1:
+    port: 506
+  CB-2S.LJ-1:
+    port: 507
+valve_states:
+  GSH-1.EV-1: open
+#component_failures:
+#  CB-1W.EV-11:
+#    default: 0.3
+#  CB-1W.TC-1:
+#    random: 0.6
+#  CB-1W.PT-1:
+#    dead: 1.0
+#  CB-1S.TC-1:
+#    NaN: 0.5
+gashouses:
+  GSH-1:
+    - 'CB-1W'
+    - 'CB-1S'
+    - 'CB-1T'
+    - 'CB-2W'
+    - 'CB-2S'
+    - 'CB-2T'
+  GSH-1_FM:
+    - 'FM-1'
+    - 'FM-2'
+    - 'FM-3'
+    - 'FM-4'
+initial_temperatures:
+  GSH-1: 75
+initial_pressures:
+  GSH-1: 50
+# model specific config parameters
+localhost: false
+socket_type: UDP
+noise_factor: 0.01

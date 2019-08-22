@@ -7,6 +7,7 @@ from metecmodel import Model, StatisticsCollector
 from labjackemulator import LabJack
 from main_program.labjackthread import LabJackThread
 from logger import Logger
+from metecmodel.networkgraph import NetworkModel
 
 
 def load_config_file(filename):
@@ -21,7 +22,7 @@ def load_config_file(filename):
 
 
 if __name__ == '__main__':
-    config = load_config_file('../Resources/config/model_config_2.yaml')
+    config = load_config_file('../Resources/config/model_config_3.yaml')
     model = Model(config['sensor_properties'], config['volumes_files'], config['gashouses'],
                   initial_pressure=config['initial_pressures'], initial_temperature=config['initial_temperatures'],
                   failures=config.get('component_failures', {}))
@@ -44,6 +45,8 @@ if __name__ == '__main__':
         lj_thread = LabJackThread(labjack)
         labjack_threads.append(lj_thread)
         lj_thread.start()
+
+    network_model = NetworkModel('../Resources/networkgraphs/networkgraph_1.json', labjacks)
 
     try:
         while True:
@@ -137,6 +140,25 @@ if __name__ == '__main__':
                     elif type_of_failure == 'K':
                         print('Killing {}'.format(labjack_to_fail))
                         labjack_to_fail.stop_server()
+                if char == 'I':
+                    remove_or_repair = input('- for remove, + for repair, | for repair all: ')
+                    if remove_or_repair == '-':
+                        u, v = input('Input the network link to remove as "<component-1> <component-2>": ').split()
+                        network_model.disconnect_nodes(u, v)
+                        print('Edge {} {} removed'.format(u, v))
+                    elif remove_or_repair == '+':
+                        u, v = input('Input the network link to repair as "<component-1> <component-2>": ').split()
+                        network_model.repair_edge(u, v)
+                        print('Edge {} {} repaired'.format(u, v))
+                    elif remove_or_repair == '|':
+                        network_model.reset_network()
+                        print('Network nodes have been reset')
+                if char == 'J':
+                    u, v = input('Input the network link to check as "<component-1> <component-2>": ').split()
+                    if network_model.network_connected(u, v):
+                        print('Nodes are connected')
+                    else:
+                        print('Nodes are not connected')
             except Exception as e:
                 print(e)
     except KeyboardInterrupt:
