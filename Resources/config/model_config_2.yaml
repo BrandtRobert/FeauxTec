@@ -7,10 +7,6 @@ volumes_files:
   - '/var/root/PycharmProjects/metec_model/Resources/GSH-2-fake-volumes.json'
   - '/var/root/PycharmProjects/metec_model/Resources/GSH-3-fake-volumes.json'
   - '/var/root/PycharmProjects/metec_model/Resources/GSH-4-fake-volumes.json'
-  - '/var/root/PycharmProjects/metec_model/Resources/GSH-5-fake-volumes.json'
-  - '/var/root/PycharmProjects/metec_model/Resources/GSH-6-fake-volumes.json'
-  - '/var/root/PycharmProjects/metec_model/Resources/GSH-7-fake-volumes.json'
-  - '/var/root/PycharmProjects/metec_model/Resources/GSH-8-fake-volumes.json'
 Labjacks:
   # GSH-1
   GSH-1.LJ-1:
@@ -72,75 +68,11 @@ Labjacks:
     port: 527
   CB-8T.LJ-1:
     port: 528
-  # GSH-5
-  GSH-5.LJ-1:
-    port: 529
-  CB-9W.LJ-1:
-    port: 530
-  CB-9T.LJ-1:
-    port: 531
-  CB-9S.LJ-1:
-    port: 532
-  CB-10W.LJ-1:
-    port: 533
-  CB-10T.LJ-1:
-    port: 534
-  CB-10S.LJ-1:
-    port: 535
-  # GSH-6
-  GSH-6.LJ-1:
-    port: 536
-  CB-11W.LJ-1:
-    port: 537
-  CB-11S.LJ-1:
-    port: 538
-  CB-11T.LJ-1:
-    port: 539
-  CB-12W.LJ-1:
-    port: 540
-  CB-12S.LJ-1:
-    port: 541
-  CB-12T.LJ-1:
-    port: 542
-  # GSH-7
-  GSH-7.LJ-1:
-    port: 543
-  CB-13W.LJ-1:
-    port: 544
-  CB-13S.LJ-1:
-    port: 545
-  CB-13T.LJ-1:
-    port: 546
-  CB-14W.LJ-1:
-    port: 547
-  CB-14S.LJ-1:
-    port: 548
-  CB-14T.LJ-1:
-    port: 549
-  # GSH-8
-  GSH-8.LJ-1:
-    port: 550
-  CB-15W.LJ-1:
-    port: 551
-  CB-15S.LJ-1:
-    port: 552
-  CB-15T.LJ-1:
-    port: 553
-  CB-16W.LJ-1:
-    port: 554
-  CB-16S.LJ-1:
-    port: 555
-  CB-16T.LJ-1:
-    port: 556
 valve_states:
   GSH-1.EV-1: open
   GSH-2.EV-1: open
   GSH-3.EV-1: open
   GSH-4.EV-1: open
-  GSH-5.EV-1: open
-  GSH-6.EV-1: open
-  GSH-7.EV-1: open
-  GSH-8.EV-1: open
   CB-3W.EV-11: open
   CB-3W.EV-12: open
   CB-3W.EV-13: open
@@ -204,68 +136,16 @@ gashouses:
     - 'FM-2'
     - 'FM-3'
     - 'FM-4'
-  GSH-5:
-    - 'CB-9W'
-    - 'CB-9S'
-    - 'CB-9T'
-    - 'CB-10W'
-    - 'CB-10S'
-    - 'CB-10T'
-  GSH-5_FM:
-    - 'FM-1'
-    - 'FM-2'
-    - 'FM-3'
-    - 'FM-4'
-  GSH-6:
-    - 'CB-11W'
-    - 'CB-11S'
-    - 'CB-11T'
-    - 'CB-12W'
-    - 'CB-12S'
-    - 'CB-12T'
-  GSH-6_FM:
-    - 'FM-1'
-    - 'FM-2'
-    - 'FM-3'
-    - 'FM-4'
-  GSH-7:
-    - 'CB-13W'
-    - 'CB-13S'
-    - 'CB-13T'
-    - 'CB-14W'
-    - 'CB-14S'
-    - 'CB-14T'
-  GSH-7_FM:
-    - 'FM-1'
-    - 'FM-2'
-    - 'FM-3'
-    - 'FM-4'
-  GSH-8:
-    - 'CB-15W'
-    - 'CB-15S'
-    - 'CB-15T'
-    - 'CB-16W'
-    - 'CB-16S'
-    - 'CB-16T'
-  GSH-8_FM:
-    - 'FM-1'
-    - 'FM-2'
-    - 'FM-3'
-    - 'FM-4'
 initial_temperatures:
   GSH-1: 75
   GSH-2: 75
   GSH-3: 75
   GSH-4: 75
-  GSH-5: 75
-  GSH-6: 75
 initial_pressures:
   GSH-1: 50
   GSH-2: 40
   GSH-3: 30
   GSH-4: 30
-  GSH-5: 30
-  GSH-6: 30
 # model specific config parameters
 localhost: false
 socket_type: UDP

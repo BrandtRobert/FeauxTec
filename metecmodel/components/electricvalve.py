@@ -30,7 +30,6 @@ class ElectricValve(ComponentBaseClass, GraphNode):
     def get_reading_voltage(self):
         # Valve thinks it's closed because of a wasp nest or something
         if self.is_simulated_failure(self.failure_rate):
-            print('failure occurred')
             return 1
         reading = self.get_reading()
         if reading is 'open':

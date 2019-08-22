@@ -11,5 +11,6 @@ class ParseMultipleVolumes(ParserBaseClass):
     def parse(self) -> Dict:
         master_dict: Dict = {}
         for path in self.file_path:
+            print('Parsing file: {}'.format(path))
             master_dict.update(VolumesParser(path).parse())
         return master_dict

@@ -72,6 +72,7 @@ class Model(ModelBaseClass):
             else:
                 component = ManualValve(name, neighbors, info, initial_state='open')
         else:
+            self.logger.warning('Unknown type for component {}'.format(name))
             return None
         return component
 

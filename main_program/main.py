@@ -21,10 +21,10 @@ def load_config_file(filename):
 
 
 if __name__ == '__main__':
-    config = load_config_file('../Resources/config/model_config.yaml')
+    config = load_config_file('../Resources/config/model_config_2.yaml')
     model = Model(config['sensor_properties'], config['volumes_files'], config['gashouses'],
                   initial_pressure=config['initial_pressures'], initial_temperature=config['initial_temperatures'],
-                  failures=config['component_failures'])
+                  failures=config.get('component_failures', {}))
 
     for valve, state in config['valve_states'].items():
         model.set_valve(valve, state)
@@ -33,6 +33,7 @@ if __name__ == '__main__':
     socket_type = socket.SOCK_STREAM if config['socket_type'] == 'TCP' else socket.SOCK_DGRAM
     labjack_threads = []
     labjacks = {}
+    print('Creating {} LabJacks'.format(len(labjack_names_data)))
     for name, data in labjack_names_data.items():
         port = data['port']
         failures = data.get('failures', {})
