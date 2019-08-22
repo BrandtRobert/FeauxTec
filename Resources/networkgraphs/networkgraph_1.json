@@ -1,0 +1,14 @@
+[
+  {
+    "name": "root",
+    "neighbors": ["GSH-1.switch"]
+  },
+  {
+    "name": "GSH-1.switch",
+    "neighbors": [
+      "CB-1W.LJ-1", "CB-1S.LJ-1", "CB-1T.LJ-1",
+      "CB-2W.LJ-1", "CB-2S.LJ-1", "CB-2T.LJ-1",
+      "GSH-1.LJ-1"
+    ]
+  }
+]
