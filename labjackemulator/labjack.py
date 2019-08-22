@@ -160,7 +160,7 @@ class LabJack:
         for idx, pin in enumerate(pins):
             component = self._get_component_from_pin(pin)
             if component and 'ElectricValve' in component.get_type():
-                if component.get_reading_voltage() == 'open' or component.get_reading_voltage() == 'b':
+                if component.get_reading_voltage() == 0:
                     bit_str = bit_str ^ 0x1 << idx
         self.logger.info('LJ:{} DIO state request returning {}'.format(self.port, bin(bit_str)))
         return encoder.respond_read_registers(request_header, [(bit_str, 'UINT32')], self.ENDIANNESS)

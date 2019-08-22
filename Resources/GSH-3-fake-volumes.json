@@ -1,0 +1,2293 @@
+/**
+Json will have to be stripped of comments
+*/
+[
+  /*
+     *************************************************
+     ================== GSH-3 ========================
+     *************************************************
+  */
+  {
+    "ITEM": "GSH-3.MV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-1", "GSH-3.VOL-0"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-2",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-2", "GSH-3.VOL-0"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.EV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-0", "GSH-3.PT-1"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PT-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.EV-1", "GSH-3.PR-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PT-1", "GSH-3.VOL-4"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-3",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-4", "GSH-3.VOL-5"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-4",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-5", "GSH-3.VOL-3"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-5",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-5", "GSH-3.VOL-6"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-2",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-6", "GSH-3.VOL-7"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-3",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-5", "GSH-3.VOL-8"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-6",
+    "STATES": [
+      {"STATE": "A",
+      "COMMON": ["GSH-3.VOL-8", "GSH-3.VOL-9"]},
+      {"STATE": "B",
+      "COMMON": ["GSH-3.VOL-8", "GSH-3.VOL-10"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-7",
+    "STATES": [
+      {"STATE": "A",
+      "COMMON": ["GSH-3.VOL-8", "GSH-3.VOL-12"]},
+      {"STATE": "B",
+      "COMMON": ["GSH-3.VOL-8", "GSH-3.VOL-13"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.FM-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.VOL-9", "GSH-3.VOL-11"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.FM-2",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.VOL-10", "GSH-3.VOL-11"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.FM-3",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.VOL-12", "GSH-3.VOL-14"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.FM-4",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.VOL-13", "GSH-3.VOL-14"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.FM-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.VOL-9", "GSH-3.VOL-11"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-8",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-11", "GSH-3.VOL-15"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-9",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-15", "GSH-3.VOL-16"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-10",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-16", "GSH-3.VOL-17"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-11",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-17", "GSH-3.VOL-18"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-12",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-18", "GSH-3.VOL-19"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-13",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-19", "GSH-3.VOL-20"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-14",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-20", "GSH-3.VOL-14"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-15",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-21", "GSH-3.VOL-22"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-16",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-23", "GSH-3.VOL-24"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-17",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-25", "GSH-3.VOL-26"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-18",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-27", "GSH-3.VOL-28"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-19",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-29", "GSH-3.VOL-30"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-20",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-31", "GSH-3.VOL-32"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.MV-21",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["GSH-3.VOL-31", "GSH-3.VOL-33"]},
+      {"STATE": "CLOSED",
+      "COMMON": []}
+    ]
+  },
+
+  {
+    "ITEM": "GSH-3.VOL-0",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-1", "GSH-3.PG-1", "GSH-3.MV-2", "GSH-3.EV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.CY-1", "GSH-3.MV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-2",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.CY-2", "GSH-3.MV-2"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-3",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-4"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-4",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-3", "GSH-3.PR-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-5",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-3", "GSH-3.MV-4", "GSH-3.MV-5", "GSH-3.PR-3", "GSH-3.PG-2"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-6",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-5", "GSH-3.PR-2"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-7",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-2", "GSH-3.CY-3"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-8",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-3", "GSH-3.PG-3", "GSH-3.PT-2", "GSH-3.TC-2", "GSH-3.MV-6", "GSH-3.MV-7"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-9",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-6", "GSH-3.FM-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-10",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-6", "GSH-3.FM-2"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-11",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.FM-1", "GSH-3.FM-1", "GSH-3.MV-8"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-12",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-7", "GSH-3.FM-3"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-13",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-7", "GSH-3.FM-4"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-14",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.FM-3", "GSH-3.FM-4", "GSH-3.MV-14"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-15",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-8", "GSH-3.MV-9", "GSH-3.PR-4"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-16",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-9", "GSH-3.MV-10", "GSH-3.PR-5"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-17",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-10", "GSH-3.MV-11", "GSH-3.PR-6"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-18",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-11", "GSH-3.MV-12", "GSH-3.PR-7"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-19",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-12", "GSH-3.MV-13", "GSH-3.PR-8"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-20",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-13", "GSH-3.MV-14", "GSH-3.PR-9"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-21",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-4", "GSH-3.PG-4", "GSH-3.MV-15"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-22",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-15", "CB-5T.MV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-23",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-5", "GSH-3.PG-5", "GSH-3.MV-16"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-24",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-16", "CB-5W.MV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-25",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-6", "GSH-3.PG-6", "GSH-3.MV-17"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-26",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-17", "CB-5S.MV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-27",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-7", "GSH-3.PG-7", "GSH-3.MV-18"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-28",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-18", "CB-6W.MV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-29",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-8", "GSH-3.PG-8"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-30",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-19", "CB-6T.MV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-31",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.PR-9", "GSH-3.PG-9", "GSH-3.MV-20", "GSH-3.MV-21"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-32",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-20", "CB-6S.MV-1"]}
+    ]
+  },
+  {
+    "ITEM": "GSH-3.VOL-33",
+    "STATES": [
+      {"STATE": "NORMAL",
+      "COMMON": ["GSH-3.MV-21", "GSH-3.GCSAMPLEPORT"]}
+    ]
+  },
+  // GSH-3 gauges, transducers and couples
+  {
+    "ITEM": "GSH-3.PG-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-0"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-2",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-5"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-3",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-8"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-4",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-21"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-5",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-23"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-6",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-7",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-27"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-8",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-29"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PG-9",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-31"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PT-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.EV-1", "GSH-3.PR-1"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PT-2",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-8"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.TC-2",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-8"]
+      }
+    ]
+  },
+  // GSH-3 regulators
+  {
+    "ITEM": "GSH-3.PR-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.PT-1", "GSH-3.VOL-4"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-2",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-7", "GSH-3.VOL-6"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-3",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-5", "GSH-3.VOL-8"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-4",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-15", "GSH-3.VOL-21"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-5",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-16", "GSH-3.VOL-23"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-6",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-17", "GSH-3.VOL-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-7",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-18", "GSH-3.VOL-27"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-8",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-19", "GSH-3.VOL-29"]
+      }
+    ]
+  },
+  {
+    "ITEM": "GSH-3.PR-9",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["GSH-3.VOL-20", "GSH-3.VOL-31"]
+      }
+    ]
+  },
+  /*
+     *************************************************
+     ================== CB-5S ========================
+     *************************************************
+  */
+  {
+    "ITEM": "CB-5S.MV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON": ["GSH-3.VOL-26", "CB-5S.VOL-1"]},
+      {"STATE": "CLOSED",
+       "COMMON":[]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-11",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-11"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-12",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-12"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-13",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-13"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-21",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-21"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-22",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-22"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-23",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-23"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-31",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-31"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-32",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-32"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.CO-33",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.VOL-1", "CB-5S.EV-33"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-11",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-11", "CB-5S.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-12",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-12", "CB-5S.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-13",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-13", "CB-5S.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-21",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-21", "CB-5S.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-22",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-22", "CB-5S.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-23",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-23", "CB-5S.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-31",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-31", "CB-5S.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-32",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-32", "CB-5S.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-33",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5S.CO-33", "CB-5S.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-14",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5S.VOL-2","CB-5S.VOL-3"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5S.VOL-2","CB-5S.VOL-4"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-24",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5S.VOL-5","CB-5S.VOL-6"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5S.VOL-5","CB-5S.VOL-7"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.EV-34",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5S.VOL-8","CB-5S.VOL-0"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5S.VOL-8","CB-5S.VOL-10"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.MV-1", "CB-5S.TC-1", "CB-5S.PT-1",
+        "CB-5S.CO-11", "CB-5S.CO-12", "CB-5S.CO-13",
+        "CB-5S.CO-21", "CB-5S.CO-22", "CB-5S.CO-23",
+        "CB-5S.CO-31", "CB-5S.CO-32", "CB-5S.CO-33"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-2",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-11", "CB-5S.EV-12", "CB-5S.EV-13", "CB-5S.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-3",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-4",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-5",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-21", "CB-5S.EV-22", "CB-5S.EV-23", "CB-5S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-6",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-7",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-8",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-31", "CB-5S.EV-32", "CB-5S.EV-33", "CB-5S.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-9",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.VOL-10",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5S.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5S.PT-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5S.VOL-1"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5S.TC-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5S.VOL-1"]
+      }
+    ]
+  },
+  /*
+     *************************************************
+     ================== CB-6S ========================
+     *************************************************
+  */
+  {
+    "ITEM": "CB-6S.MV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON": ["GSH-3.VOL-32", "CB-6S.VOL-1"]},
+      {"STATE": "CLOSED",
+       "COMMON":[]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-11",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-11"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-12",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-12"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-13",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-13"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-21",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-21"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-22",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-22"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-23",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-23"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-31",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-31"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-32",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-32"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.CO-33",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.VOL-1", "CB-6S.EV-33"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-11",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-11", "CB-6S.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-12",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-12", "CB-6S.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-13",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-13", "CB-6S.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-21",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-21", "CB-6S.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-22",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-22", "CB-6S.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-23",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-23", "CB-6S.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-31",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-31", "CB-6S.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-32",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-32", "CB-6S.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-33",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6S.CO-33", "CB-6S.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-14",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-6S.VOL-2","CB-6S.VOL-3"]},
+      {"STATE": "B",
+       "COMMON": ["CB-6S.VOL-2","CB-6S.VOL-4"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-24",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-6S.VOL-5","CB-6S.VOL-6"]},
+      {"STATE": "B",
+       "COMMON": ["CB-6S.VOL-5","CB-6S.VOL-7"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.EV-34",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-6S.VOL-8","CB-6S.VOL-0"]},
+      {"STATE": "B",
+       "COMMON": ["CB-6S.VOL-8","CB-6S.VOL-10"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.MV-1", "CB-6S.TC-1", "CB-6S.PT-1",
+        "CB-6S.CO-11", "CB-6S.CO-12", "CB-6S.CO-13",
+        "CB-6S.CO-21", "CB-6S.CO-22", "CB-6S.CO-23",
+        "CB-6S.CO-31", "CB-6S.CO-32", "CB-6S.CO-33"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-2",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-11", "CB-6S.EV-12", "CB-6S.EV-13", "CB-6S.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-3",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-4",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-5",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-21", "CB-6S.EV-22", "CB-6S.EV-23", "CB-6S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-6",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-7",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-8",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-31", "CB-6S.EV-32", "CB-6S.EV-33", "CB-6S.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-9",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.VOL-10",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6S.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6S.PT-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6S.VOL-1"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6S.TC-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6S.VOL-1"]
+      }
+    ]
+  },
+  /*
+     *************************************************
+     ================== CB-5T ========================
+     *************************************************
+  */
+  {
+    "ITEM": "CB-5T.MV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON":["GSH-3.VOL-22", "CB-5T.VOL-1"]},
+      {"STATE": "CLOSED",
+        "COMMON":[]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.CO-11",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-11"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.CO-12",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-12"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.CO-13",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-13"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.CO-14",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.EV-11",
+    "STATES": [
+      {"STATE":"OPEN",
+       "COMMON":["CB-5T.CO-11", "CB-5T.VOL-2"]},
+      {"STATE":"CLOSED",
+       "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-12",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-5T.CO-12", "CB-5T.VOL-2"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-13",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-5T.CO-13", "CB-5T.VOL-2"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-14",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-5T.CO-14", "CB-5T.VOL-2"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-15",
+    "STATES":[
+      {"STATE":"A",
+      "COMMON":["CB-5T.VOL-2", "CB-5T.VOL-3"]},
+      {"STATE":"B",
+      "COMMON":["CB-5T.VOL-2", "CB-5T.VOL-4"]}
+  ]},
+  {
+    "ITEM": "CB-5T.CO-21",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-21"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.CO-22",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-22"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.CO-23",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-23"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.CO-24",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-5T.VOL-1, CB-5T.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5T.EV-21",
+    "STATES": [
+      {"STATE":"OPEN",
+       "COMMON":["CB-5T.CO-21", "CB-5T.VOL-5"]},
+      {"STATE":"CLOSED",
+       "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-22",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-5T.CO-22", "CB-5T.VOL-5"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-23",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-5T.CO-23", "CB-5T.VOL-5"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-24",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-5T.CO-24", "CB-5T.VOL-5"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-5T.EV-25",
+    "STATES":[
+      {"STATE":"A",
+      "COMMON":["CB-5T.VOL-5", "CB-5T.VOL-6"]},
+      {"STATE":"B",
+      "COMMON":["CB-5T.VOL-5", "CB-5T.VOL-7"]}
+  ]},
+  {
+    "ITEM": "CB-5T.VOL-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.MV-1", "CB-5T.TC-1", "CB-5T.PT-1",
+        "CB-5T.CO-11", "CB-5T.CO-12", "CB-5T.CO-13", "CB-5T.CO-14",
+        "CB-5T.CO-21", "CB-5T.CO-22", "CB-5T.CO-24", "CB-5T.CO-24"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.VOL-2",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.EV-11", "CB-5T.EV-12", "CB-5T.EV-13", "CB-5T.EV-14", "CB-5T.EV-15"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.VOL-3",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.EV-15"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.VOL-4",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.EV-15"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.VOL-5",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.EV-21", "CB-5T.EV-22", "CB-5T.EV-23", "CB-5T.EV-24", "CB-5T.EV-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.VOL-6",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.EV-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.VOL-7",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.EV-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.PT-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.VOL-1"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5T.TC-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5T.VOL-1"]
+      }
+    ]
+  },
+  /*
+     *************************************************
+     ================== CB-6T ========================
+     *************************************************
+  */
+  {
+    "ITEM": "CB-6T.MV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON":["GSH-3.VOL-30", "CB-6T.VOL-1"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.CO-11",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-11"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.CO-12",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-12"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.CO-13",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-13"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.CO-14",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.EV-11",
+    "STATES": [
+      {"STATE":"OPEN",
+       "COMMON":["CB-6T.CO-11", "CB-6T.VOL-2"]},
+      {"STATE":"CLOSED",
+       "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-12",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-6T.CO-12", "CB-6T.VOL-2"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-13",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-6T.CO-13", "CB-6T.VOL-2"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-14",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-6T.CO-14", "CB-6T.VOL-2"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-15",
+    "STATES":[
+      {"STATE":"A",
+      "COMMON":["CB-6T.VOL-2", "CB-6T.VOL-3"]},
+      {"STATE":"B",
+      "COMMON":["CB-6T.VOL-2", "CB-6T.VOL-4"]}
+  ]},
+  {
+    "ITEM": "CB-6T.CO-21",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-21"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.CO-22",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-22"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.CO-23",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-23"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.CO-24",
+    "STATES": [
+      {"STATE":"NORMAL",
+      "COMMON":["CB-6T.VOL-1, CB-6T.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6T.EV-21",
+    "STATES": [
+      {"STATE":"OPEN",
+       "COMMON":["CB-6T.CO-21", "CB-6T.VOL-5"]},
+      {"STATE":"CLOSED",
+       "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-22",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-6T.CO-22", "CB-6T.VOL-5"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-23",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-6T.CO-23", "CB-6T.VOL-5"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-24",
+    "STATES":[
+      {"STATE":"OPEN",
+      "COMMON":["CB-6T.CO-24", "CB-6T.VOL-5"]},
+      {"STATE":"CLOSED",
+      "COMMON":[]}
+  ]},
+  {
+    "ITEM": "CB-6T.EV-25",
+    "STATES":[
+      {"STATE":"A",
+      "COMMON":["CB-6T.VOL-5", "CB-6T.VOL-6"]},
+      {"STATE":"B",
+      "COMMON":["CB-6T.VOL-5", "CB-6T.VOL-7"]}
+  ]},
+  {
+    "ITEM": "CB-6T.VOL-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.MV-1", "CB-6T.TC-1", "CB-6T.PT-1",
+        "CB-6T.CO-11", "CB-6T.CO-12", "CB-6T.CO-13", "CB-6T.CO-14",
+        "CB-6T.CO-21", "CB-6T.CO-22", "CB-6T.CO-24", "CB-6T.CO-24"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.VOL-2",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.EV-11", "CB-6T.EV-12", "CB-6T.EV-13", "CB-6T.EV-14", "CB-6T.EV-15"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.VOL-3",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.EV-15"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.VOL-4",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.EV-15"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.VOL-5",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.EV-21", "CB-6T.EV-22", "CB-6T.EV-23", "CB-6T.EV-24", "CB-6T.EV-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.VOL-6",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.EV-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.VOL-7",
+    "STATES":[
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.EV-25"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.PT-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.VOL-1"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6T.TC-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6T.VOL-1"]
+      }
+    ]
+  },
+  /*
+     *************************************************
+     ================== CB-5W ========================
+     *************************************************
+  */
+  {
+    "ITEM": "CB-5W.MV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON": ["GSH-3.VOL-24", "CB-5W.VOL-1"]},
+      {"STATE": "CLOSED",
+       "COMMON":[]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-11",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-11"],
+       "EOS":  "CB-5W.VOL-1 * 2"}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-12",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-12"],
+       "EOS": "CB-5W.VOL-1 * 2"}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-13",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-13"],
+       "EOS": "CB-5W.VOL-1 * 2"}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-21",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-21"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-22",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-22"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-23",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-23"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-31",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-31"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-32",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-32"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.CO-33",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.VOL-1", "CB-5W.EV-33"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-11",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON": ["CB-5W.CO-11", "CB-5W.VOL-2"],
+       "EOS": "1"},
+      {"STATE": "CLOSED",
+       "COMMON": [],
+       "EOS": "0"}
+    ],
+    "INITIAL-STATE": 1
+  },
+  {
+    "ITEM": "CB-5W.EV-12",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON": ["CB-5W.CO-12", "CB-5W.VOL-2"],
+       "EOS":  "1"},
+      {"STATE": "CLOSED",
+       "COMMON": [],
+       "EOS": "0"}
+    ],
+    "INITIAL-STATE": 1
+  },
+  {
+    "ITEM": "CB-5W.EV-13",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON": ["CB-5W.CO-13", "CB-5W.VOL-2"],
+       "EOS": "1"},
+      {"STATE": "CLOSED",
+       "COMMON": [],
+       "EOS": "0"}
+    ],
+    "INITIAL-STATE": 1
+  },
+  {
+    "ITEM": "CB-5W.EV-21",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5W.CO-21", "CB-5W.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-22",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5W.CO-22", "CB-5W.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-23",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5W.CO-23", "CB-5W.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-31",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5W.CO-31", "CB-5W.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-32",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5W.CO-32", "CB-5W.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-33",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-5W.CO-33", "CB-5W.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-14",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5W.VOL-2","CB-5W.VOL-3"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5W.VOL-2","CB-5W.VOL-4"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-24",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5W.VOL-5","CB-5W.VOL-6"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5W.VOL-5","CB-5W.VOL-7"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.EV-34",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5W.VOL-8","CB-5W.VOL-0"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5W.VOL-8","CB-5W.VOL-10"]}
+    ]
+  },
+  // The equation of state for volume 1 is a simple pressure drop across MV1
+  {
+    "ITEM": "CB-5W.VOL-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.MV-1", "CB-5W.TC-1", "CB-5W.PT-1",
+        "CB-5W.CO-11", "CB-5W.CO-12", "CB-5W.CO-13",
+        "CB-5W.CO-21", "CB-5W.CO-22", "CB-5W.CO-23",
+        "CB-5W.CO-31", "CB-5W.CO-32", "CB-5W.CO-33"],
+       "EOS": "INITIAL-STATE"}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-2",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-11", "CB-5W.EV-12", "CB-5W.EV-13", "CB-5W.EV-14"],
+       "EOS":  "TABLE.CO-11.CO-12.CO-13 VALVES.EV-11.EV-12.EV-13"}
+    ],
+    "EMISSIONS": 0
+  },
+  {
+    "ITEM": "CB-5W.VOL-3",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-14"],
+       "EOS": "CB-5W.EV-14 * CB-5W.VOL-2"}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-4",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-14"],
+       "EOS": "CB-5W.EV-14 * CB-5W.VOL-2"}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-5",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-21", "CB-5W.EV-22", "CB-5W.EV-23", "CB-5W.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-6",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-7",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-8",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-31", "CB-5W.EV-32", "CB-5W.EV-33", "CB-5W.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-9",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.VOL-10",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-5W.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-5W.PT-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5W.VOL-1"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-5W.TC-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-5W.VOL-1"]
+      }
+    ]
+  },
+  /*
+     *************************************************
+     ================== CB-6W ========================
+     *************************************************
+  */
+  {
+    "ITEM": "CB-6W.MV-1",
+    "STATES": [
+      {"STATE": "OPEN",
+       "COMMON": ["GSH-3.VOL-28", "CB-6W.VOL-1"]},
+      {"STATE": "CLOSED",
+       "COMMON":[]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-11",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-11"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-12",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-12"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-13",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-13"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-21",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-21"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-22",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-22"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-23",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-23"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-31",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-31"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-32",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-32"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.CO-33",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.VOL-1", "CB-6W.EV-33"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-11",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-11", "CB-6W.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-12",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-12", "CB-6W.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-13",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-13", "CB-6W.VOL-2"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-21",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-21", "CB-6W.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-22",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-22", "CB-6W.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-23",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-23", "CB-6W.VOL-5"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-31",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-31", "CB-6W.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-32",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-32", "CB-6W.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-33",
+    "STATES": [
+      {"STATE": "OPEN",
+      "COMMON": ["CB-6W.CO-33", "CB-6W.VOL-8"]},
+      {"STATE": "CLOSED",
+       "COMMON": []}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-14",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5W.VOL-2","CB-6W.VOL-3"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5W.VOL-2","CB-6W.VOL-4"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-24",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5W.VOL-5","CB-6W.VOL-6"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5W.VOL-5","CB-6W.VOL-7"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.EV-34",
+    "STATES": [
+      {"STATE": "A",
+       "COMMON": ["CB-5W.VOL-8","CB-6W.VOL-0"]},
+      {"STATE": "B",
+       "COMMON": ["CB-5W.VOL-8","CB-6W.VOL-10"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-1",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.MV-1", "CB-6W.TC-1", "CB-6W.PT-1",
+        "CB-6W.CO-11", "CB-6W.CO-12", "CB-6W.CO-13",
+        "CB-6W.CO-21", "CB-6W.CO-22", "CB-6W.CO-23",
+        "CB-6W.CO-31", "CB-6W.CO-32", "CB-6W.CO-33"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-2",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-11", "CB-6W.EV-12", "CB-6W.EV-13", "CB-6W.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-3",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-14"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-4",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-5",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-21", "CB-6W.EV-22", "CB-6W.EV-23", "CB-6W.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-6",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-7",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-24"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-8",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-31", "CB-6W.EV-32", "CB-6W.EV-33", "CB-6W.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-9",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.VOL-10",
+    "STATES": [
+      {"STATE": "NORMAL",
+       "COMMON": ["CB-6W.EV-34"]}
+    ]
+  },
+  {
+    "ITEM": "CB-6W.PT-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6W.VOL-1"]
+      }
+    ]
+  },
+  {
+    "ITEM": "CB-6W.TC-1",
+    "STATES": [
+      {
+        "STATE": "NORMAL",
+        "COMMON": ["CB-6W.VOL-1"]
+      }
+    ]
+  }
+]
