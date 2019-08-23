@@ -1,0 +1,38 @@
+[
+  {
+    "name": "root",
+    "neighbors": ["GSH-1.switch", "GSH-2.switch", "GSH-3.switch"]
+  },
+  {
+    "name": "GSH-1.switch",
+    "neighbors": [
+      "CB-1W.LJ-1", "CB-1S.LJ-1", "CB-1T.LJ-1",
+      "CB-2W.LJ-1", "CB-2S.LJ-1", "CB-2T.LJ-1",
+      "GSH-1.LJ-1"
+    ]
+  },
+  {
+    "name": "GSH-2.switch",
+    "neighbors": [
+      "CB-3W.LJ-1", "CB-3S.LJ-1", "CB-3T.LJ-1",
+      "CB-4W.LJ-1", "CB-4S.LJ-1", "CB-4T.LJ-1",
+      "GSH-2.LJ-1"
+    ]
+  },
+  {
+    "name": "GSH-3.switch",
+    "neighbors": [
+      "CB-5W.LJ-1", "CB-5S.LJ-1", "CB-5T.LJ-1",
+      "CB-6W.LJ-1", "CB-6S.LJ-1", "CB-6T.LJ-1",
+      "GSH-3.LJ-1"
+    ]
+  },
+  {
+    "name": "GSH-4.switch",
+    "neighbors": [
+      "CB-7W.LJ-1", "CB-7S.LJ-1", "CB-7T.LJ-1",
+      "CB-8W.LJ-1", "CB-8S.LJ-1", "CB-8T.LJ-1",
+      "GSH-4.LJ-1"
+    ]
+  }
+]

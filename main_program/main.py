@@ -2,6 +2,8 @@ import sys
 import socket
 import yaml
 import time
+import argparse
+# so this can run as cmd line script
 sys.path.insert(0, '/var/root/PycharmProjects/metec_model')
 from metecmodel import Model, StatisticsCollector
 from labjackemulator import LabJack
@@ -21,8 +23,16 @@ def load_config_file(filename):
             exit(1)
 
 
+def get_command_line_args():
+    parser: argparse.ArgumentParser = argparse.ArgumentParser(description='Get configs for FeauxTec Server')
+    parser.add_argument('-m', '--main_config', type=str, default='../Resources/config/model_config_2.yaml')
+    parser.add_argument('-n', '--network_config', type=str, default='../Resources/networkgraphs/networkgraph_2.json')
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
-    config = load_config_file('../Resources/config/model_config_3.yaml')
+    cmd_args = get_command_line_args()
+    config = load_config_file(cmd_args.main_config)
     model = Model(config['sensor_properties'], config['volumes_files'], config['gashouses'],
                   initial_pressure=config['initial_pressures'], initial_temperature=config['initial_temperatures'],
                   failures=config.get('component_failures', {}))
@@ -46,7 +56,7 @@ if __name__ == '__main__':
         labjack_threads.append(lj_thread)
         lj_thread.start()
 
-    network_model = NetworkModel('../Resources/networkgraphs/networkgraph_1.json', labjacks)
+    network_model = NetworkModel(cmd_args.network_config, labjacks)
 
     try:
         while True:
