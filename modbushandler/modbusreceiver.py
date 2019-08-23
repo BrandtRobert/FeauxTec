@@ -60,6 +60,9 @@ class ModbusReceiver:
             s.listen(5)
             self.logger.info('Server started {}:{}'.format(socket.gethostname(), self.port))
             while not self.stop.is_set():
+                if self.failures.get('disconnected', False):
+                    sleep(1)
+                    continue
                 self._current_connection, address = s.accept()
                 self.logger.info('New connection accepted {}'.format(self._current_connection.getpeername()))
                 with self._current_connection:
@@ -132,6 +135,9 @@ class ModbusReceiver:
                 self.logger.debug('Starting UDP server at {}:{}'.format(socket.gethostname(), self.port))
             while not self.stop.is_set():
                 try:
+                    if self.failures.get('disconnected', False):
+                        sleep(1)
+                        continue
                     buffer, address = s.recvfrom(256)
                     self.logger.debug('Message received from: {}'.format(address))
                     StatisticsCollector.increment_packets_received()

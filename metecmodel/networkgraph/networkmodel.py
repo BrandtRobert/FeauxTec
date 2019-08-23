@@ -26,7 +26,7 @@ class NetworkModel:
             self.deleted_edges.append((a, b))
             for _, labjack in self.labjacks.items():
                 if not nx.has_path(self.graph, 'root', labjack.name):
-                    labjack.inject_failures({'stop-responding': True})
+                    labjack.inject_failures({'disconnected': True})
         except nx.NetworkXError:
             print('Edge does not exist')
 
@@ -39,7 +39,7 @@ class NetworkModel:
             self.deleted_edges.remove((a, b))
             for _, labjack in self.labjacks.items():
                 if nx.has_path(self.graph, 'root', labjack.name):
-                    labjack.inject_failures({'stop-responding': False})
+                    labjack.inject_failures({'disconnected': False})
         else:
             print('Edge was not previously removed')
 
